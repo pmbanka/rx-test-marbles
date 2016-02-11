@@ -61,7 +61,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestSchedulerExtensions.cs" />
+    <Compile Include="CreateColdObservable.cs" />
+    <Compile Include="CreateHotObservable.cs" />
+    <Compile Include="CreateTime.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
