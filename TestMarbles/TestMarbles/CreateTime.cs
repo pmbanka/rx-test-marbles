@@ -17,7 +17,7 @@ namespace TestMarbles
                 throw new ArgumentException(@"Marble diagram for time should have a completion marker ""|""",
                     nameof(marbles));
             }
-            return indexOf * Utils.FrameTimeFactor;
+            return indexOf * Constants.FrameTimeFactor;
         }
     }
 }

@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 
 namespace TestMarbles
 {
-    internal static class Utils
+    public static class TestSchedulerEx
     {
-        public const long FrameTimeFactor = 10;
-
         public static IEnumerable<Recorded<Notification<T>>> ParseMarbles<T>(
             string marbles,
             IReadOnlyDictionary<char, T> values,
@@ -24,11 +21,11 @@ namespace TestMarbles
                     nameof(marbles));
             }
             long subscribeIndex = marbles.IndexOf('^');
-            long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex*-FrameTimeFactor;
+            long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -Constants.FrameTimeFactor;
             long groupStart = -1;
             for (int i = 0; i < marbles.Length; i++)
             {
-                long frame = i*FrameTimeFactor + frameOffset;
+                long frame = i * Constants.FrameTimeFactor + frameOffset;
                 Notification<T> notification = null;
                 var c = marbles[i];
                 switch (c)
@@ -51,7 +48,7 @@ namespace TestMarbles
                         notification = Notification.CreateOnError<T>(error ?? new Exception("error"));
                         break;
                     default:
-                        dynamic value = values != null ? values[c] : (dynamic) c;
+                        dynamic value = values != null ? values[c] : (dynamic)c;
                         notification = Notification.CreateOnNext(value);
                         break;
                 }
@@ -62,4 +59,5 @@ namespace TestMarbles
             }
         }
     }
+
 }

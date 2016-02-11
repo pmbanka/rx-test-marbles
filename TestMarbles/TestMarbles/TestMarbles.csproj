@@ -64,7 +64,8 @@
     <Compile Include="CreateColdObservable.cs" />
     <Compile Include="CreateHotObservable.cs" />
     <Compile Include="CreateTime.cs" />
-    <Compile Include="Utils.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ParseMarbles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -36,7 +36,7 @@ namespace TestMarbles
                 throw new ArgumentNullException(nameof(values),
                     "If observable type is not char, values dictionary has to be provided");
             }
-            var events = Utils.ParseMarbles(marbles, values, error).ToArray();
+            var events = TestSchedulerEx.ParseMarbles(marbles, values, error).ToArray();
             return scheduler.CreateHotObservable(events);
         }
     }

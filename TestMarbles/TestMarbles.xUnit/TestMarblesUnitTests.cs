@@ -18,6 +18,24 @@ namespace TestMarbles.xUnit
         public TestMarblesUnitTests(ITestOutputHelper output)
         {
             _output = output;
+            //AssertionOptions.AssertEquivalencyUsing(options => options.Using(a => a.));
+
+        }
+
+        [Fact]
+        public void ParseMarbles_should_parse_marble_string_into_series_of_notifications()
+        {
+            var expected = new List<Recorded<Notification<char>>>
+            {
+                new Recorded<Notification<char>>(70, Notification.CreateOnNext('A')),
+                new Recorded<Notification<char>>(110, Notification.CreateOnNext('B')),
+                new Recorded<Notification<char>>(150, Notification.CreateOnCompleted<char>())
+            };
+            var actual = TestSchedulerEx.ParseMarbles(
+                "-------a---b---|",
+                new Dictionary<char, char> {{'a', 'A'}, {'b', 'B'}}, 
+                null);
+            Assert.Equal(expected, actual);
         }
 
         [Fact]
