@@ -10,10 +10,15 @@ namespace TestMarbles
 {
     public static class TestSchedulerEx
     {
+        public static IEnumerable<Recorded<Notification<char>>> ParseMarbles(string marbles, Exception error = null)
+        {
+            return ParseMarbles<char>(marbles, null, error);
+        }
+
         public static IEnumerable<Recorded<Notification<T>>> ParseMarbles<T>(
             string marbles,
             IReadOnlyDictionary<char, T> values,
-            Exception error)
+            Exception error = null)
         {
             if (marbles.IndexOf('!') != -1)
             {
@@ -32,7 +37,7 @@ namespace TestMarbles
                 {
                     case '-':
                     case ' ':
-                        break; // TODO error?
+                        break;
                     case '(':
                         groupStart = frame;
                         break;
