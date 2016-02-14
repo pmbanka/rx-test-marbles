@@ -8,7 +8,7 @@ using Microsoft.Reactive.Testing;
 
 namespace TestMarbles
 {
-    public static class TestSchedulerEx
+    public static partial class TestSchedulerEx
     {
         public static IEnumerable<Recorded<Notification<char>>> ParseMarbles(string marbles, Exception error = null)
         {

@@ -98,6 +98,7 @@
   <ItemGroup>
     <Compile Include="CreateObservableTests.cs" />
     <Compile Include="CreateTimeTests.cs" />
+    <Compile Include="ParseMarblesAsSubscriptionsTests.cs" />
     <Compile Include="ParseMarblesTests.cs" />
     <Compile Include="DebugUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

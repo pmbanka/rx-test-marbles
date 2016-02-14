@@ -66,7 +66,9 @@
     <Compile Include="CreateTime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ParseMarbles.cs" />
+    <Compile Include="ParseMarblesAsSubscriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SubscriptionLog.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
