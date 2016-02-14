@@ -96,7 +96,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TestMarblesUnitTests.cs" />
+    <Compile Include="CreateObservableTests.cs" />
+    <Compile Include="CreateTimeTests.cs" />
+    <Compile Include="ParseMarblesTests.cs" />
+    <Compile Include="DebugUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
