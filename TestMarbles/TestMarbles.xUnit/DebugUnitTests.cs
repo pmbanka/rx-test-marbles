@@ -25,6 +25,7 @@ namespace TestMarbles.xUnit
         {
             var scheduler = new TestScheduler();
             var hot = scheduler.CreateHotObservable("---a---b---|");
+            
             hot.Subscribe(
                 o => _output.WriteLine($"{o}"),
                 ex => _output.WriteLine(ex.Message),
@@ -32,6 +33,7 @@ namespace TestMarbles.xUnit
             scheduler.Start();
             _output.WriteLine("Time " + scheduler.Now.Ticks);
             _output.WriteLine("Cnt " + hot.Messages.Count);
+           // scheduler.Start()
         }
 
         [Fact]

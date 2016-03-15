@@ -1,10 +1,11 @@
 using System;
+using Microsoft.Reactive.Testing;
 
 namespace TestMarbles
 {
     public static partial class TestSchedulerEx
     {
-        public static SubscriptionLog ParseMarblesAsSubscriptions(string marbles)
+        public static Subscription ParseMarblesAsSubscriptions(string marbles)
         {
             long groupStart = -1;
             long subscriptionFrame = long.MaxValue;
@@ -49,8 +50,8 @@ namespace TestMarbles
                 }
             }
             return unsubscriptionFrame < 0
-                ? new SubscriptionLog(subscriptionFrame)
-                : new SubscriptionLog(subscriptionFrame, unsubscriptionFrame);
+                ? new Subscription(subscriptionFrame)
+                : new Subscription(subscriptionFrame, unsubscriptionFrame);
         }
     }
 }

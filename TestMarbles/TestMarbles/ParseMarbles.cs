@@ -25,6 +25,7 @@ namespace TestMarbles
                 throw new ArgumentException("Conventional marble diagrams cannot have unsubscription marker '!'",
                     nameof(marbles));
             }
+            // TODO handle cold observables in T
             long subscribeIndex = marbles.IndexOf('^');
             long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -Constants.FrameTimeFactor;
             long groupStart = -1;
