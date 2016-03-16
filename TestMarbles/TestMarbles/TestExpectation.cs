@@ -14,9 +14,15 @@ namespace TestMarbles
 
     internal class ObservableExpectation<T> : TestExpectation
     {
-        public List<Recorded<Notification<T>>> Actual { get; set; }
+        public ObservableExpectation()
+        {
+            Actual = new List<Recorded<Notification<T>>>();
+            Expected = new List<Recorded<Notification<T>>>();
+        }
 
-        public List<Recorded<Notification<T>>> Expected { get; set; }
+        public List<Recorded<Notification<T>>> Actual { get; }
+
+        public List<Recorded<Notification<T>>> Expected { get; }
 
         public override void Assert()
         {
@@ -26,6 +32,12 @@ namespace TestMarbles
 
     internal class SubscriptionExpectation : TestExpectation
     {
+        public SubscriptionExpectation()
+        {
+            Actual = new List<Subscription>();
+            Expected = new List<Subscription>();
+        }
+
         public List<Subscription> Actual { get; set; }
 
         public List<Subscription> Expected { get; set; }

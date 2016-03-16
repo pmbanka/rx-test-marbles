@@ -21,11 +21,23 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
+        public void Ensure()
+        {
+            using (var s = new MarbleScheduler())
+            {
+                var e1 = s.Hot("----a--^--b-------c--|");
+                var e2 = s.Hot(  "---d-^--e---------f-----|");
+                var expected =        "---(be)----c-f-----|";
+                s.ExpectObservable(e1.Merge(e2)).ToBe(expected);
+            }
+        }
+
+        [Fact]
         public void Hot()
         {
             var scheduler = new TestScheduler();
             var hot = scheduler.CreateHotObservable("---a---b---|");
-            
+
             hot.Subscribe(
                 o => _output.WriteLine($"{o}"),
                 ex => _output.WriteLine(ex.Message),
@@ -33,7 +45,7 @@ namespace TestMarbles.xUnit
             scheduler.Start();
             _output.WriteLine("Time " + scheduler.Now.Ticks);
             _output.WriteLine("Cnt " + hot.Messages.Count);
-           // scheduler.Start()
+            // scheduler.Start()
         }
 
         [Fact]

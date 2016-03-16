@@ -8,28 +8,28 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace TestMarbles
 {
-    public class Marbles : IDisposable
+    public class MarbleScheduler : IDisposable
     {
         private readonly TestScheduler _scheduler;
         private readonly List<TestExpectation> _expectations;
         private bool _expectationsChecked;
 
-        public Marbles(TestScheduler scheduler)
+        public MarbleScheduler(TestScheduler scheduler)
         {
             _scheduler = scheduler;
             _expectations = new List<TestExpectation>();
         }
 
-        public Marbles() : this(new TestScheduler()) { }
+        public MarbleScheduler() : this(new TestScheduler()) { }
 
-        public ITestableObservable<char> CreateColdObservable(
+        public ITestableObservable<char> Cold(
             string marbles,
             Exception error = null)
         {
             return _scheduler.CreateColdObservable(marbles, error);
         }
 
-        public ITestableObservable<T> CreateColdObservable<T>(
+        public ITestableObservable<T> Cold<T>(
             string marbles,
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
@@ -37,14 +37,14 @@ namespace TestMarbles
             return _scheduler.CreateColdObservable(marbles, values, error);
         }
 
-        public ITestableObservable<char> CreateHotObservable(
+        public ITestableObservable<char> Hot(
             string marbles,
             Exception error = null)
         {
             return _scheduler.CreateHotObservable(marbles, error);
         }
 
-        public ITestableObservable<T> CreateHotObservable<T>(
+        public ITestableObservable<T> Hot<T>(
             string marbles,
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
@@ -52,7 +52,7 @@ namespace TestMarbles
             return _scheduler.CreateHotObservable(marbles, values, error);
         }
 
-        public void CheckExpectations()
+        public void Start()
         {
             if (_expectationsChecked)
             {
@@ -71,7 +71,6 @@ namespace TestMarbles
             string unsubscriptionMarbles = null)
         {
             var expectation = new ObservableExpectation<T>();
-            var actual = new List<Recorded<Notification<T>>>();
             var unsubscriptionFrame = unsubscriptionMarbles != null
                 ? TestSchedulerEx.ParseMarblesAsSubscriptions(unsubscriptionMarbles).Unsubscribe
                 : Subscription.Infinite;
@@ -82,10 +81,10 @@ namespace TestMarbles
                     x =>
                     {
                         // TODO handle observable-of-observable
-                        actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnNext(x)));
+                        expectation.Actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnNext(x)));
                     },
-                    err => actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnError<T>(err))),
-                    () => actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnCompleted<T>())));
+                    err => expectation.Actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnError<T>(err))),
+                    () => expectation.Actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnCompleted<T>())));
             });
             if (unsubscriptionFrame != Subscription.Infinite)
             {
@@ -109,7 +108,7 @@ namespace TestMarbles
         {
             if (!_expectationsChecked)
             {
-                CheckExpectations();
+                Start();
             }
         }
     }

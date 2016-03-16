@@ -18,7 +18,7 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
         {
-            _expectation.Expected = TestSchedulerEx.ParseMarbles(marbles, values, error).ToList();
+            _expectation.Expected.AddRange(TestSchedulerEx.ParseMarbles(marbles, values, error));
             _expectation.Ready = true;
         }
     }

@@ -65,9 +65,9 @@
     <Compile Include="CreateHotObservable.cs" />
     <Compile Include="CreateTime.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Marbles\Marbles.cs" />
-    <Compile Include="Marbles\TestExpectation.cs" />
-    <Compile Include="Marbles\ToBe.cs" />
+    <Compile Include="MarbleScheduler.cs" />
+    <Compile Include="TestExpectation.cs" />
+    <Compile Include="ToBe.cs" />
     <Compile Include="ParseMarbles.cs" />
     <Compile Include="ParseMarblesAsSubscriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
