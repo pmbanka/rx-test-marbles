@@ -19,6 +19,7 @@ namespace TestMarbles
             Exception error = null)
         {
             _expectation.Expected.AddRange(TestSchedulerEx.ParseMarbles(marbles, values, error));
+            _expectation.Values = values;
             _expectation.Ready = true;
         }
     }
