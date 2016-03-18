@@ -7,10 +7,6 @@ namespace TestMarbles.xUnit
 {
     public class CreateTimeTests
     {
-        public CreateTimeTests()
-        {
-        }
-
         [Fact]
         public void CrateTime_should_parse_simple_marbles_to_time()
         {

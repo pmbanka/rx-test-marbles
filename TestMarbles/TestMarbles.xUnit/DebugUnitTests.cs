@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace TestMarbles.xUnit
 {
-    public class DebugUnitTests
+    public class DebugUnitTests : ReactiveTest
     {
         private readonly ITestOutputHelper _output;
 

@@ -8,10 +8,6 @@ namespace TestMarbles.xUnit
 {
     public class CreateObservableTests
     {
-        public CreateObservableTests()
-        {
-        }
-
         [Fact]
         public void CreateColdObservable_should_create_cold_observable()
         {

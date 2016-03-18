@@ -1,21 +1,65 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
 namespace TestMarbles.xUnit
 {
-    public class ParseMarblesTests
+    public class ParseMarblesTests : ReactiveTest
     {
+        [Fact]
+        public void ParseMarbles_should_parse_observable_empty()
+        {
+            var expected = new List<Recorded<Notification<char>>>
+            {
+                OnCompleted<char>(0),
+            };
+            var actual = TestSchedulerEx.ParseMarbles("|");
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ParseMarbles_should_parse_observable_never()
+        {
+            var expected = Enumerable.Empty<Recorded<Notification<char>>>();
+            var actual = TestSchedulerEx.ParseMarbles("");
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ParseMarbles_should_parse_observable_return()
+        {
+            var expected = new List<Recorded<Notification<char>>>
+            {
+                OnNext(0, 'a'),
+                OnCompleted<char>(0)
+            };
+            var actual = TestSchedulerEx.ParseMarbles("(a|)");
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ParseMarbles_should_parse_observable_throw()
+        {
+            var ex = new Exception();
+            var expected = new List<Recorded<Notification<char>>>
+            {
+                OnError<char>(0, ex),
+            };
+            var actual = TestSchedulerEx.ParseMarbles("#", ex);
+            Assert.Equal(expected, actual);
+        }
+
         [Fact]
         public void ParseMarbles_should_parse_marble_string_into_series_of_notifications()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
-                new Recorded<Notification<char>>(70, Notification.CreateOnNext('A')),
-                new Recorded<Notification<char>>(110, Notification.CreateOnNext('B')),
-                new Recorded<Notification<char>>(150, Notification.CreateOnCompleted<char>())
+                OnNext(70, 'A'),
+                OnNext(110, 'B'),
+                OnCompleted<char>(150)
             };
             var actual = TestSchedulerEx.ParseMarbles(
                 "-------a---b---|",
@@ -28,9 +72,9 @@ namespace TestMarbles.xUnit
         {
             var expected = new List<Recorded<Notification<char>>>
             {
-                new Recorded<Notification<char>>(20, Notification.CreateOnNext('A')),
-                new Recorded<Notification<char>>(50, Notification.CreateOnNext('B')),
-                new Recorded<Notification<char>>(80, Notification.CreateOnCompleted<char>())
+                OnNext(20, 'A'),
+                OnNext(50, 'B'),
+                OnCompleted<char>(80)
             };
             var actual = TestSchedulerEx.ParseMarbles(
                 "--a--b--|    ",
@@ -43,9 +87,9 @@ namespace TestMarbles.xUnit
         {
             var expected = new List<Recorded<Notification<char>>>
             {
-                new Recorded<Notification<char>>(40, Notification.CreateOnNext('A')),
-                new Recorded<Notification<char>>(80, Notification.CreateOnNext('B')),
-                new Recorded<Notification<char>>(120, Notification.CreateOnCompleted<char>())
+                OnNext(40, 'A'),
+                OnNext(80, 'B'),
+                OnCompleted<char>(120)
             };
             var actual = TestSchedulerEx.ParseMarbles(
                 "---^---a---b---|",
@@ -59,9 +103,9 @@ namespace TestMarbles.xUnit
             var error = new Exception("omg error!");
             var expected = new List<Recorded<Notification<char>>>
             {
-                new Recorded<Notification<char>>(70, Notification.CreateOnNext('A')),
-                new Recorded<Notification<char>>(110, Notification.CreateOnNext('B')),
-                new Recorded<Notification<char>>(150, Notification.CreateOnError<char>(error))
+                OnNext(70, 'A'),
+                OnNext(110, 'B'),
+                OnError<char>(150,error)
             };
             var actual = TestSchedulerEx.ParseMarbles(
                 "-------a---b---#",
@@ -75,9 +119,9 @@ namespace TestMarbles.xUnit
         {
             var expected = new List<Recorded<Notification<char>>>
             {
-                new Recorded<Notification<char>>(20, Notification.CreateOnNext('a')),
-                new Recorded<Notification<char>>(50, Notification.CreateOnNext('b')),
-                new Recorded<Notification<char>>(80, Notification.CreateOnNext('c'))
+                OnNext(20, 'a'),
+                OnNext(50, 'b'),
+                OnNext(80, 'c')
             };
             var actual = TestSchedulerEx.ParseMarbles("--a--b--c--");
             Assert.Equal(expected, actual);
@@ -88,9 +132,9 @@ namespace TestMarbles.xUnit
         {
             var expected = new List<Recorded<Notification<char>>>
             {
-                new Recorded<Notification<char>>(30, Notification.CreateOnNext('a')),
-                new Recorded<Notification<char>>(30, Notification.CreateOnNext('b')),
-                new Recorded<Notification<char>>(30, Notification.CreateOnNext('c'))
+                OnNext(30, 'a'),
+                OnNext(30, 'b'),
+                OnNext(30, 'c')
             };
             var actual = TestSchedulerEx.ParseMarbles("---(abc)---");
             Assert.Equal(expected, actual);
