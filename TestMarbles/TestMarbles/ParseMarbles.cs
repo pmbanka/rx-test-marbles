@@ -54,7 +54,7 @@ namespace TestMarbles
                         notification = Notification.CreateOnError<T>(error ?? new Exception("error"));
                         break;
                     default:
-                        dynamic value = values != null ? values[c] : (dynamic)c;
+                        T value = values != null ? values[c] : (T)(object)c;
                         notification = Notification.CreateOnNext(value);
                         break;
                 }
