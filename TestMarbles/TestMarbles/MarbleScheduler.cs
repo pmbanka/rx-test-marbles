@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
+using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -13,6 +14,8 @@ namespace TestMarbles
         private readonly TestScheduler _scheduler;
         private readonly List<TestExpectation> _expectations;
         private bool _expectationsChecked;
+
+        public IScheduler Scheduler => _scheduler;
 
         public MarbleScheduler(TestScheduler scheduler)
         {
@@ -104,7 +107,7 @@ namespace TestMarbles
             return new SubscriptionToBe(test);
         }
 
-        public void Dispose()
+        void IDisposable.Dispose()
         {
             if (!_expectationsChecked)
             {
