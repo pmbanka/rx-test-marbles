@@ -17,20 +17,23 @@ namespace TestMarbles
             var modifiedNotifications = values == null 
                 ? notifications.Select(p => p.CastToChar()) 
                 : notifications.Select(p => p.CastToChar(values));
-            return ParseNotifications(modifiedNotifications);
+            return ParseNotifications(modifiedNotifications, throwOnError: false);
         }
 
         public static string ParseNotifications<T>(
             IEnumerable<Recorded<Notification<T>>> notifications,
-            IReadOnlyDictionary<T, char> values)
+            IReadOnlyDictionary<T, char> values,
+            bool throwOnError = true)
         {
             var modifiedNotifications = notifications.Select(p => p.CastToChar(values));
             return ParseNotifications(modifiedNotifications);
         }
 
-        public static string ParseNotifications(IEnumerable<Recorded<Notification<char>>> notifications)
+        public static string ParseNotifications(
+            IEnumerable<Recorded<Notification<char>>> notifications,
+            bool throwOnError = true)
         {
-            var builder = new StringBuilder("");
+            var builder = new StringBuilder();
             var entries = notifications
                 .GroupBy(n => n.Time)
                 .SelectMany(group => group
@@ -52,9 +55,16 @@ namespace TestMarbles
                 var notification = entry.Value.Notification;
                 if (notification.Time%Constants.FrameTimeFactor != 0)
                 {
-                    throw new ArgumentException(
-                        $"Notifications cannot have times not being a multiple of {Constants.FrameTimeFactor} (in that case, {notification.Time})",
-                        nameof(notifications));
+                    var message =
+                        $"Notifications cannot have times not being a multiple of {Constants.FrameTimeFactor} (in that case, {notification.Time})";
+                    if (throwOnError)
+                    {
+                        throw new ArgumentException(message, nameof(notifications));
+                    }
+                    else
+                    {
+                        return $"Could not generate marbles: {message}";
+                    }
                 }
                 var dashes = GetNumberOfDashes(notification, lastNotificationTime, entry.IsFirst);
                 builder.Append('-', dashes);
