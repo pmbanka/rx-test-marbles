@@ -8,6 +8,7 @@ using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using Xunit;
 using Xunit.Abstractions;
+using System.Reactive.Concurrency;
 
 namespace TestMarbles.xUnit
 {
@@ -18,6 +19,15 @@ namespace TestMarbles.xUnit
         public DebugUnitTests(ITestOutputHelper output)
         {
             _output = output;
+        }
+
+        [Fact]
+        public void TestScheduler()
+        {
+            var s = new TestScheduler();
+            var obs = Observable.Return('a');
+            s.ScheduleAbsolute(0, () => obs.Subscribe(_ => _output.WriteLine(s.Clock.ToString())));
+            s.Start();
         }
 
         [Fact]
