@@ -5,7 +5,7 @@ using Microsoft.Reactive.Testing;
 using TestMarbles.Extensions;
 using Xunit;
 
-namespace TestMarbles.xUnit
+namespace TestMarbles.xUnit.ExtensionsTests
 {
     public class CreateObservableTests
     {

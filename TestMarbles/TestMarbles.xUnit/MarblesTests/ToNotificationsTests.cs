@@ -5,12 +5,12 @@ using System.Reactive;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
-namespace TestMarbles.xUnit
+namespace TestMarbles.xUnit.MarblesTests
 {
-    public class ParseMarblesTests : ReactiveTest
+    public class ToNotificationsTests : ReactiveTest
     {
         [Fact]
-        public void ParseMarbles_should_parse_observable_empty()
+        public void ToNotifications_should_parse_observable_empty()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
@@ -21,7 +21,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_observable_never()
+        public void ToNotifications_should_parse_observable_never()
         {
             var expected = Enumerable.Empty<Recorded<Notification<char>>>();
             var actual = Marbles.ToNotifications("");
@@ -29,7 +29,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_observable_return()
+        public void ToNotifications_should_parse_observable_return()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
@@ -41,7 +41,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_observable_throw()
+        public void ToNotifications_should_parse_observable_throw()
         {
             var ex = new Exception();
             var expected = new List<Recorded<Notification<char>>>
@@ -53,7 +53,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_marble_string_into_series_of_notifications()
+        public void ToNotifications_should_parse_marble_string_into_series_of_notifications()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
@@ -68,7 +68,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_marble_string_allowing_spaces_at_the_end()
+        public void ToNotifications_should_parse_marble_string_allowing_spaces_at_the_end()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
@@ -83,7 +83,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_marble_string_with_subscription_marker()
+        public void ToNotifications_should_parse_marble_string_with_subscription_marker()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
@@ -98,7 +98,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_parse_marble_string_with_error_marker()
+        public void ToNotifications_should_parse_marble_string_with_error_marker()
         {
             var error = new Exception("omg error!");
             var expected = new List<Recorded<Notification<char>>>
@@ -115,7 +115,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_default_to_letters_if_no_dictionary_provided()
+        public void ToNotifications_should_default_to_letters_if_no_dictionary_provided()
         {
             var expected = new List<Recorded<Notification<char>>>
             {
@@ -128,7 +128,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void ParseMarbles_should_handle_grouped_values()
+        public void ToNotifications_should_handle_grouped_values()
         {
             var expected = new List<Recorded<Notification<char>>>
             {

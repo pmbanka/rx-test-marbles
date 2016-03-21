@@ -96,13 +96,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="CreateObservableTests.cs" />
-    <Compile Include="CreateTimeTests.cs" />
-    <Compile Include="ExpectObservableTests.cs" />
-    <Compile Include="ParseMarblesAsSubscriptionsTests.cs" />
-    <Compile Include="ParseMarblesTests.cs" />
+    <Compile Include="ExtensionsTests\CreateObservableTests.cs" />
+    <Compile Include="MarblesTests\ToCompletionTimeTests.cs" />
+    <Compile Include="MarbleSchedulerTests\ExpectObservableTests.cs" />
+    <Compile Include="MarblesTests\ToSubscriptionTests.cs" />
+    <Compile Include="MarblesTests\ToNotificationsTests.cs" />
     <Compile Include="DebugUnitTests.cs" />
-    <Compile Include="ParseNotificationsTests.cs" />
+    <Compile Include="MarblesTests\FromNotificationsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

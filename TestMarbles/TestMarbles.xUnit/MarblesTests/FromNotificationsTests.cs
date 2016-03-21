@@ -1,22 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 using Xunit;
 
-namespace TestMarbles.xUnit
+namespace TestMarbles.xUnit.MarblesTests
 {
-    public class ParseNotificationsTests : ReactiveTest
+    public class FromNotificationsTests : ReactiveTest
     {
         [Fact]
         public void empty_is_parsed_correctly()
         {
-            var n = new List<Recorded<Notification<char>>>
-            {  
-            };
+            var n = new List<Recorded<Notification<char>>>();
             var actual = Marbles.FromNotifications(n);
             Assert.Equal("", actual);
         }
@@ -55,7 +50,7 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
-        public void mixed_is_parsed_correctly()
+        public void sequence_is_parsed_correctly()
         {
             var n = new List<Recorded<Notification<char>>>
             {
@@ -78,6 +73,17 @@ namespace TestMarbles.xUnit
             };
             var actual = Marbles.FromNotifications(n);
             Assert.Equal("-X---(Y|)", actual);
+        }
+
+        [Fact]
+        public void parsing_notifications_with_enexpected_timestamps_throws()
+        {
+            var n = new List<Recorded<Notification<char>>>
+            {
+                OnNext(1, 'X')
+            };
+            Action action = () => Marbles.FromNotifications(n);
+            Assert.Throws<ArgumentException>(action);
         }
     }
 }

@@ -1,11 +1,10 @@
 using System;
 using FluentAssertions;
-using Microsoft.Reactive.Testing;
 using Xunit;
 
-namespace TestMarbles.xUnit
+namespace TestMarbles.xUnit.MarblesTests
 {
-    public class CreateTimeTests
+    public class ToCompletionTimeTests
     {
         [Fact]
         public void ToCompletionTime_should_parse_simple_marbles_to_time()
