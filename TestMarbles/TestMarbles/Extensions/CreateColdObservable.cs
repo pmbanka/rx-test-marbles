@@ -16,9 +16,9 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
-            if (string.IsNullOrWhiteSpace(marbles))
+            if (marbles == null)
             {
-                throw new ArgumentException("Cannot be either null, empty, nor whitespace.", nameof(marbles));
+                throw new ArgumentNullException(nameof(marbles));
             }
             if (marbles.IndexOf('^') != -1)
             {
@@ -42,9 +42,9 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
-            if (string.IsNullOrWhiteSpace(marbles))
+            if (marbles == null)
             {
-                throw new ArgumentException("Cannot be either null, empty, nor whitespace.", nameof(marbles));
+                throw new ArgumentNullException(nameof(marbles));
             }
             if (marbles.IndexOf('^') != -1)
             {

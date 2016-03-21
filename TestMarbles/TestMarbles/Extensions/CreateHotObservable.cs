@@ -16,9 +16,9 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
-            if (string.IsNullOrWhiteSpace(marbles))
+            if (marbles == null)
             {
-                throw new ArgumentException("Cannot be either null, empty, nor whitespace.", nameof(marbles));
+                throw new ArgumentNullException(nameof(marbles));
             }
             var events = Marbles.ToNotifications(marbles, error).ToArray();
             return scheduler.CreateHotObservable(events);
@@ -34,9 +34,9 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
-            if (string.IsNullOrWhiteSpace(marbles))
+            if (marbles == null)
             {
-                throw new ArgumentException("Cannot be either null, empty, nor whitespace.", nameof(marbles));
+                throw new ArgumentNullException(nameof(marbles));
             }
             if (values == null)
             {
