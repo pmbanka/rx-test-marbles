@@ -10,30 +10,77 @@ namespace TestMarbles
 {
     public static partial class Marbles
     {
-        internal static string FromNotifications<T>(
+        internal static string GetMarblesOrErrorMessage<T>(
             IEnumerable<Recorded<Notification<T>>> notifications,
             IReadOnlyDictionary<T, char> values)
         {
             var modifiedNotifications = values == null 
                 ? notifications.Select(p => p.CastToChar()) 
                 : notifications.Select(p => p.CastToChar(values));
-            return FromNotifications(modifiedNotifications, throwOnError: false);
+            return FromNotifications(modifiedNotifications);
+        }
+
+        public static bool TryFromNotifications<T>(
+            IEnumerable<Recorded<Notification<T>>> notifications,
+            IReadOnlyDictionary<T, char> values,
+            out string marbles,
+            out string errorMessage)
+        {
+            try
+            {
+                marbles = FromNotifications(notifications, values);
+                errorMessage = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Could not generate marbles: {ex.Message}";
+                marbles = null;
+                return false;
+            }
+        }
+
+        public static bool TryFromNotifications(
+            IEnumerable<Recorded<Notification<char>>> notifications,
+            out string marbles,
+            out string errorMessage)
+        {
+            try
+            {
+                marbles = FromNotifications(notifications);
+                errorMessage = null;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                errorMessage = $"Could not generate marbles: {ex.Message}";
+                marbles = null;
+                return false;
+            }
         }
 
         public static string FromNotifications<T>(
             IEnumerable<Recorded<Notification<T>>> notifications,
-            IReadOnlyDictionary<T, char> values,
-            bool throwOnError = true)
+            IReadOnlyDictionary<T, char> values)
         {
+            if (notifications == null)
+            {
+                throw new ArgumentNullException(nameof(notifications));
+            }
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
             var modifiedNotifications = notifications.Select(p => p.CastToChar(values));
             return FromNotifications(modifiedNotifications);
         }
 
-        // TODO change bool to TryXX, messages
-        public static string FromNotifications(
-            IEnumerable<Recorded<Notification<char>>> notifications,
-            bool throwOnError = true)
+        public static string FromNotifications(IEnumerable<Recorded<Notification<char>>> notifications)
         {
+            if (notifications == null)
+            {
+                throw new ArgumentNullException(nameof(notifications));
+            }
             var builder = new StringBuilder();
             var entries = notifications
                 .GroupBy(n => n.Time)
@@ -58,14 +105,7 @@ namespace TestMarbles
                 {
                     var message =
                         $"Notifications cannot have times not being a multiple of {Constants.FrameTimeFactor} (in that case, {notification.Time})";
-                    if (throwOnError)
-                    {
-                        throw new ArgumentException(message, nameof(notifications));
-                    }
-                    else
-                    {
-                        return $"Could not generate marbles: {message}";
-                    }
+                    throw new ArgumentException(message, nameof(notifications));
                 }
                 var dashes = GetNumberOfDashes(notification, lastNotificationTime, entry.IsFirst);
                 builder.Append('-', dashes);

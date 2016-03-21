@@ -139,5 +139,26 @@ namespace TestMarbles.xUnit.MarblesTests
             var actual = Marbles.ToNotifications("---(abc)---");
             Assert.Equal(expected, actual);
         }
+
+        [Fact]
+        public void ToNotifications_allows_setting_symbols_with_a_dictionary()
+        {
+            var expected = new List<Recorded<Notification<int>>>
+            {
+                OnNext(0, 99),
+                OnNext(30, 1),
+                OnNext(50, 2),
+                OnNext(50, 1),
+                OnCompleted<int>(90)
+            };
+            var dict = new Dictionary<char, int>
+            {
+                { '1', 1 },
+                { '2', 2 },
+                { 'X', 99 }
+            };
+            var actual = Marbles.ToNotifications("X--1-(21)|", dict);
+            Assert.Equal(expected, actual);
+        }
     }
 }

@@ -91,10 +91,10 @@ namespace TestMarbles
         }
 
         private string ActualMarbles => 
-            Marbles.FromNotifications(Actual, Values?.ReverseKeyValue());
+            Marbles.GetMarblesOrErrorMessage(Actual, Values?.ReverseKeyValue());
 
         private string ExpectedMarbles => 
-            Marbles.FromNotifications(Expected, Values?.ReverseKeyValue());
+            Marbles.GetMarblesOrErrorMessage(Expected, Values?.ReverseKeyValue());
     }
 
     internal class SubscriptionExpectation : TestExpectation
