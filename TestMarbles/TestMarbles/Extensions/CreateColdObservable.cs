@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles.Extensions
 {
@@ -20,14 +21,7 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(marbles));
             }
-            if (marbles.IndexOf('^') != -1)
-            {
-                throw new ArgumentException("Cold observable cannot have subscription offset '^'", nameof(marbles));
-            }
-            if (marbles.IndexOf('!') != -1)
-            {
-                throw new ArgumentException("Cold observable cannot have unsubscription marker '!'", nameof(marbles));
-            }
+            marbles.CheckIfValidColdObservable(nameof(marbles));
             var events = Marbles.ToNotifications(marbles, error).ToArray();
             return scheduler.CreateColdObservable(events);
         }
@@ -46,18 +40,11 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(marbles));
             }
-            if (marbles.IndexOf('^') != -1)
-            {
-                throw new ArgumentException("Cold observable cannot have subscription offset '^'", nameof(marbles));
-            }
-            if (marbles.IndexOf('!') != -1)
-            {
-                throw new ArgumentException("Cold observable cannot have unsubscription marker '!'", nameof(marbles));
-            }
             if (values == null)
             {
                 throw new ArgumentNullException(nameof(scheduler));
             }
+            marbles.CheckIfValidColdObservable(nameof(marbles));
             var events = Marbles.ToNotifications(marbles, values, error).ToArray();
             return scheduler.CreateColdObservable(events);
         }

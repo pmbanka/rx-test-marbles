@@ -55,6 +55,6 @@ namespace TestMarbles.Helpers
         public static char CastToChar<T>(this T value)
         {
             return (char)(object)value;
-        }       
+        }    
     }
 }

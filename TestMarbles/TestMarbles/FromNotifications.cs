@@ -108,18 +108,18 @@ namespace TestMarbles
                     throw new ArgumentException(message, nameof(notifications));
                 }
                 var dashes = GetNumberOfDashes(notification, lastNotificationTime, entry.IsFirst);
-                builder.Append('-', dashes);
+                builder.Append(Marker.Nop1, dashes);
                 if (entry.Value.IsGroupStart)
                 {
-                    builder.Append('(');
+                    builder.Append(Marker.GroupStart);
                 }
                 switch (notification.Value.Kind)
                 {
                     case NotificationKind.OnCompleted:
-                        builder.Append('|');
+                        builder.Append(Marker.Completed);
                         break;
                     case NotificationKind.OnError:
-                        builder.Append('#');
+                        builder.Append(Marker.Error);
                         break;
                     case NotificationKind.OnNext:
                         builder.Append(notification.Value.Value);
@@ -129,7 +129,7 @@ namespace TestMarbles
                 }
                 if (entry.Value.IsGroupEnd)
                 {
-                    builder.Append(')');
+                    builder.Append(Marker.GroupEnd);
                 }
                 lastNotificationTime = notification.Time;
             }

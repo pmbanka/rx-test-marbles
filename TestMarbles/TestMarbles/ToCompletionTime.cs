@@ -11,10 +11,10 @@ namespace TestMarbles
     {
         public static long ToCompletionTime(string marbles)
         {
-            var indexOf = marbles.IndexOf('|');
+            var indexOf = marbles.IndexOf(Marker.Completed);
             if (indexOf == -1)
             {
-                throw new ArgumentException(@"Marble diagram for time should have a completion marker ""|""",
+                throw new ArgumentException($"Marble diagram for time should have a completion marker \"{Marker.Completed}\"",
                     nameof(marbles));
             }
             return indexOf * Constants.FrameTimeFactor;

@@ -29,7 +29,7 @@ namespace TestMarbles
             Messages = messages.ToList();
             Subscriptions = new List<Subscription>();
 
-            foreach (var message in messages)
+            foreach (var message in Messages)
             {
                 var notification = message.Value;
                 scheduler.ScheduleAbsolute(default(object), message.Time, (_, __) =>

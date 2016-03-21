@@ -20,13 +20,13 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values,
             Exception error = null)
         {
-            if (marbles.IndexOf('!') != -1)
+            if (marbles.Contains(Marker.Unsubscription))
             {
-                throw new ArgumentException("Conventional marble diagrams cannot have unsubscription marker '!'",
+                throw new ArgumentException($"Conventional marble diagrams cannot have unsubscription marker '{Marker.Unsubscription}'",
                     nameof(marbles));
             }
             // TODO handle cold observables in T
-            long subscribeIndex = marbles.IndexOf('^');
+            long subscribeIndex = marbles.IndexOf(Marker.Subscription);
             long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -Constants.FrameTimeFactor;
             long groupStart = -1;
             for (int i = 0; i < marbles.Length; i++)
@@ -36,21 +36,21 @@ namespace TestMarbles
                 var c = marbles[i];
                 switch (c)
                 {
-                    case '-':
-                    case ' ':
+                    case Marker.Nop1:
+                    case Marker.Nop2:
                         break;
-                    case '(':
+                    case Marker.GroupStart:
                         groupStart = frame;
                         break;
-                    case ')':
+                    case Marker.GroupEnd:
                         groupStart = -1;
                         break;
-                    case '|':
+                    case Marker.Completed:
                         notification = Notification.CreateOnCompleted<T>();
                         break;
-                    case '^':
+                    case Marker.Subscription:
                         break;
-                    case '#':
+                    case Marker.Error:
                         notification = Notification.CreateOnError<T>(error ?? new Exception("error"));
                         break;
                     default:
