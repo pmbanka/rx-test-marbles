@@ -3,34 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
-using System.Reactive.Linq;
 using Microsoft.Reactive.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestMarbles.Extensions;
 
 namespace TestMarbles
 {
-    public class MarbleScheduler : IDisposable
+    public class MarbleScheduler : VirtualTimeScheduler<long, long>, IDisposable
     {
-        private readonly TestScheduler _scheduler;
+        protected override long Add(long absolute, long relative) => absolute + relative;
+
+        protected override DateTimeOffset ToDateTimeOffset(long absolute) => new DateTimeOffset(absolute, TimeSpan.Zero);
+
+        protected override long ToRelative(TimeSpan timeSpan) => timeSpan.Ticks;
+
         private readonly List<TestExpectation> _expectations;
+
         private bool _expectationsChecked;
 
-        public IScheduler Scheduler => _scheduler;
-
-        public MarbleScheduler(TestScheduler scheduler)
+        public MarbleScheduler()
         {
-            _scheduler = scheduler;
             _expectations = new List<TestExpectation>();
         }
-
-        public MarbleScheduler() : this(new TestScheduler()) { }
 
         public ITestableObservable<char> Cold(
             string marbles,
             Exception error = null)
         {
-            return _scheduler.CreateColdObservable(marbles, error);
+            return Cold<char>(marbles, null, error);
         }
 
         public ITestableObservable<T> Cold<T>(
@@ -38,14 +36,16 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
         {
-            return _scheduler.CreateColdObservable(marbles, values, error);
+            // TODO input validation
+            var messages = Marbles.ToNotifications(marbles, values, error);
+            return new ColdObservable<T>(this, messages);
         }
 
         public ITestableObservable<char> Hot(
             string marbles,
             Exception error = null)
         {
-            return _scheduler.CreateHotObservable(marbles, error);
+            return Hot<char>(marbles, null, error);
         }
 
         public ITestableObservable<T> Hot<T>(
@@ -53,16 +53,18 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
         {
-            return _scheduler.CreateHotObservable(marbles, values, error);
+            // TODO input validation
+            var messages = Marbles.ToNotifications(marbles, values, error);
+            return new HotObservable<T>(this, messages);
         }
 
-        public void Start()
+        public new void Start()
         {
             if (_expectationsChecked)
             {
                 throw new InvalidOperationException("Cannot check expectations more than once in a unit test.");
             }
-            _scheduler.Start();
+            base.Start();
             foreach (var expectation in _expectations.Where(e => e.Ready))
             {
                 expectation.Assert();
@@ -79,20 +81,20 @@ namespace TestMarbles
                 ? Marbles.ToSubscription(unsubscriptionMarbles).Unsubscribe
                 : Subscription.Infinite;
             IDisposable disposable = null;
-            _scheduler.ScheduleAbsolute(0, () =>
+            this.ScheduleAbsolute(0, () =>
             {
                 disposable = observable.Subscribe(
                     x =>
                     {
                         // TODO handle observable-of-observable
-                        expectation.Actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnNext(x)));
+                        expectation.Actual.Add(new Recorded<Notification<T>>(Clock, Notification.CreateOnNext(x)));
                     },
-                    err => expectation.Actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnError<T>(err))),
-                    () => expectation.Actual.Add(new Recorded<Notification<T>>(_scheduler.Clock, Notification.CreateOnCompleted<T>())));
+                    err => expectation.Actual.Add(new Recorded<Notification<T>>(Clock, Notification.CreateOnError<T>(err))),
+                    () => expectation.Actual.Add(new Recorded<Notification<T>>(Clock, Notification.CreateOnCompleted<T>())));
             });
             if (unsubscriptionFrame != Subscription.Infinite)
             {
-                _scheduler.ScheduleAbsolute(unsubscriptionFrame, () => disposable.Dispose());
+                this.ScheduleAbsolute(unsubscriptionFrame, () => disposable.Dispose());
             }
             _expectations.Add(expectation);
             return new ObservableToBe<T>(expectation);

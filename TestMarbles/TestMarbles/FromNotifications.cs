@@ -29,7 +29,7 @@ namespace TestMarbles
             return FromNotifications(modifiedNotifications);
         }
 
-        // TODO change bool to TryXX
+        // TODO change bool to TryXX, messages
         public static string FromNotifications(
             IEnumerable<Recorded<Notification<char>>> notifications,
             bool throwOnError = true)

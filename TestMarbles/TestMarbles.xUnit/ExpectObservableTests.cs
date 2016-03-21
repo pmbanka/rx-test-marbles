@@ -22,7 +22,7 @@ namespace TestMarbles.xUnit
         public void ExpectObservable_should_work_for_observable_empty()
         {
             var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Empty<int>(s.Scheduler)).ToBe("|");
+            s.ExpectObservable(Observable.Empty<int>(s)).ToBe("|");
             s.Start();
         }
 
@@ -30,7 +30,7 @@ namespace TestMarbles.xUnit
         public void ExpectObservable_should_work_for_observable_return()
         {
             var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Return('a', s.Scheduler)).ToBe("(a|)");
+            s.ExpectObservable(Observable.Return('a', s)).ToBe("(a|)");
             s.Start();
         }
 
@@ -39,7 +39,7 @@ namespace TestMarbles.xUnit
         {
             var s = new MarbleScheduler();
             var ex = new Exception();
-            s.ExpectObservable(Observable.Throw<char>(ex, s.Scheduler)).ToBe("#", error: ex);
+            s.ExpectObservable(Observable.Throw<char>(ex, s)).ToBe("#", error: ex);
             s.Start();
         }
     }
