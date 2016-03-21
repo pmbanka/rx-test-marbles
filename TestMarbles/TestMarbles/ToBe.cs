@@ -18,7 +18,7 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
         {
-            _expectation.Expected.AddRange(TestSchedulerEx.ParseMarbles(marbles, values, error));
+            _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, values, error));
             _expectation.Values = values;
             _expectation.Ready = true;
         }
@@ -36,7 +36,7 @@ namespace TestMarbles
         public void ToBe(params string[] marbles)
         {
             _expectation.Expected = marbles
-                .Select(m => TestSchedulerEx.ParseMarblesAsSubscriptions(m))
+                .Select(m => Marbles.ToSubscription(m))
                 .ToList();
             _expectation.Ready = true;
         }

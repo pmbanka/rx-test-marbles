@@ -3,9 +3,9 @@ using Microsoft.Reactive.Testing;
 
 namespace TestMarbles
 {
-    public static partial class TestSchedulerEx
+    public static partial class Marbles
     {
-        public static Subscription ParseMarblesAsSubscriptions(string marbles)
+        public static Subscription ToSubscription(string marbles)
         {
             long groupStart = -1;
             long subscriptionFrame = long.MaxValue;

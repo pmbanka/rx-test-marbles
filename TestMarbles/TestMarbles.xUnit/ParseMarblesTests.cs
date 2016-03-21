@@ -16,7 +16,7 @@ namespace TestMarbles.xUnit
             {
                 OnCompleted<char>(0),
             };
-            var actual = TestSchedulerEx.ParseMarbles("|");
+            var actual = Marbles.ToNotifications("|");
             Assert.Equal(expected, actual);
         }
 
@@ -24,7 +24,7 @@ namespace TestMarbles.xUnit
         public void ParseMarbles_should_parse_observable_never()
         {
             var expected = Enumerable.Empty<Recorded<Notification<char>>>();
-            var actual = TestSchedulerEx.ParseMarbles("");
+            var actual = Marbles.ToNotifications("");
             Assert.Equal(expected, actual);
         }
 
@@ -36,7 +36,7 @@ namespace TestMarbles.xUnit
                 OnNext(0, 'a'),
                 OnCompleted<char>(0)
             };
-            var actual = TestSchedulerEx.ParseMarbles("(a|)");
+            var actual = Marbles.ToNotifications("(a|)");
             Assert.Equal(expected, actual);
         }
 
@@ -48,7 +48,7 @@ namespace TestMarbles.xUnit
             {
                 OnError<char>(0, ex),
             };
-            var actual = TestSchedulerEx.ParseMarbles("#", ex);
+            var actual = Marbles.ToNotifications("#", ex);
             Assert.Equal(expected, actual);
         }
 
@@ -61,7 +61,7 @@ namespace TestMarbles.xUnit
                 OnNext(110, 'B'),
                 OnCompleted<char>(150)
             };
-            var actual = TestSchedulerEx.ParseMarbles(
+            var actual = Marbles.ToNotifications(
                 "-------a---b---|",
                 new Dictionary<char, char> {{'a', 'A'}, {'b', 'B'}});
             Assert.Equal(expected, actual);
@@ -76,7 +76,7 @@ namespace TestMarbles.xUnit
                 OnNext(50, 'B'),
                 OnCompleted<char>(80)
             };
-            var actual = TestSchedulerEx.ParseMarbles(
+            var actual = Marbles.ToNotifications(
                 "--a--b--|    ",
                 new Dictionary<char, char> { { 'a', 'A' }, { 'b', 'B' } });
             Assert.Equal(expected, actual);
@@ -91,7 +91,7 @@ namespace TestMarbles.xUnit
                 OnNext(80, 'B'),
                 OnCompleted<char>(120)
             };
-            var actual = TestSchedulerEx.ParseMarbles(
+            var actual = Marbles.ToNotifications(
                 "---^---a---b---|",
                 new Dictionary<char, char> { { 'a', 'A' }, { 'b', 'B' } });
             Assert.Equal(expected, actual);
@@ -107,7 +107,7 @@ namespace TestMarbles.xUnit
                 OnNext(110, 'B'),
                 OnError<char>(150,error)
             };
-            var actual = TestSchedulerEx.ParseMarbles(
+            var actual = Marbles.ToNotifications(
                 "-------a---b---#",
                 new Dictionary<char, char> { { 'a', 'A' }, { 'b', 'B' } },
                 error);
@@ -123,7 +123,7 @@ namespace TestMarbles.xUnit
                 OnNext(50, 'b'),
                 OnNext(80, 'c')
             };
-            var actual = TestSchedulerEx.ParseMarbles("--a--b--c--");
+            var actual = Marbles.ToNotifications("--a--b--c--");
             Assert.Equal(expected, actual);
         }
 
@@ -136,7 +136,7 @@ namespace TestMarbles.xUnit
                 OnNext(30, 'b'),
                 OnNext(30, 'c')
             };
-            var actual = TestSchedulerEx.ParseMarbles("---(abc)---");
+            var actual = Marbles.ToNotifications("---(abc)---");
             Assert.Equal(expected, actual);
         }
     }

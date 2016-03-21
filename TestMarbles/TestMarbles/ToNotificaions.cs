@@ -8,14 +8,14 @@ using Microsoft.Reactive.Testing;
 
 namespace TestMarbles
 {
-    public static partial class TestSchedulerEx
+    public static partial class Marbles
     {
-        public static IEnumerable<Recorded<Notification<char>>> ParseMarbles(string marbles, Exception error = null)
+        public static IEnumerable<Recorded<Notification<char>>> ToNotifications(string marbles, Exception error = null)
         {
-            return ParseMarbles<char>(marbles, null, error);
+            return ToNotifications<char>(marbles, null, error);
         }
 
-        public static IEnumerable<Recorded<Notification<T>>> ParseMarbles<T>(
+        public static IEnumerable<Recorded<Notification<T>>> ToNotifications<T>(
             string marbles,
             IReadOnlyDictionary<char, T> values,
             Exception error = null)

@@ -7,9 +7,9 @@ using Microsoft.Reactive.Testing;
 
 namespace TestMarbles
 {
-    public static partial class TestSchedulerExtensions
+    public static partial class Marbles
     {
-        public static long CreateTime(this TestScheduler scheduler, string marbles)
+        public static long ToCompletionTime(string marbles)
         {
             var indexOf = marbles.IndexOf('|');
             if (indexOf == -1)

@@ -9,7 +9,7 @@ namespace TestMarbles.xUnit
         [Fact]
         private void ParseMarblesAsSubscriptions_should_parse_subscription_marbles()
         {
-            var result = TestSchedulerEx.ParseMarblesAsSubscriptions("---^---!-");
+            var result = Marbles.ToSubscription("---^---!-");
             result.Subscribe.Should().Be(30);
             result.Unsubscribe.Should().Be(70);
         }
@@ -18,7 +18,7 @@ namespace TestMarbles.xUnit
         // TODO FIX NAME IN JS
         private void ParseMarblesAsSubscriptions_should_parse_marbles_without_unsubscription()
         {
-            var result = TestSchedulerEx.ParseMarblesAsSubscriptions("---^-");
+            var result = Marbles.ToSubscription("---^-");
             result.Subscribe.Should().Be(30);
             result.Unsubscribe.Should().Be(long.MaxValue);
         }
@@ -26,7 +26,7 @@ namespace TestMarbles.xUnit
         [Fact]
         private void ParseMarblesAsSubscriptions_should_parse_marbles_with_instant_unsubscription()
         {
-            var result = TestSchedulerEx.ParseMarblesAsSubscriptions("---(^!)-");
+            var result = Marbles.ToSubscription("---(^!)-");
             result.Subscribe.Should().Be(30);
             result.Unsubscribe.Should().Be(30);
         }

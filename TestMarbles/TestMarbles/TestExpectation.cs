@@ -91,10 +91,10 @@ namespace TestMarbles
         }
 
         private string ActualMarbles => 
-            TestSchedulerEx.ParseNotificationsAllowingNullDict(Actual, Values?.ReverseKeyValue());
+            Marbles.FromNotifications(Actual, Values?.ReverseKeyValue());
 
         private string ExpectedMarbles => 
-            TestSchedulerEx.ParseNotificationsAllowingNullDict(Expected, Values?.ReverseKeyValue());
+            Marbles.FromNotifications(Expected, Values?.ReverseKeyValue());
     }
 
     internal class SubscriptionExpectation : TestExpectation

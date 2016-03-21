@@ -76,7 +76,7 @@ namespace TestMarbles
         {
             var expectation = new ObservableExpectation<T>();
             var unsubscriptionFrame = unsubscriptionMarbles != null
-                ? TestSchedulerEx.ParseMarblesAsSubscriptions(unsubscriptionMarbles).Unsubscribe
+                ? Marbles.ToSubscription(unsubscriptionMarbles).Unsubscribe
                 : Subscription.Infinite;
             IDisposable disposable = null;
             _scheduler.ScheduleAbsolute(0, () =>

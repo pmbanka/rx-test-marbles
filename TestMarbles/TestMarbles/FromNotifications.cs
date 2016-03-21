@@ -8,28 +8,29 @@ using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
-    public static partial class TestSchedulerEx
+    public static partial class Marbles
     {
-        internal static string ParseNotificationsAllowingNullDict<T>(
+        internal static string FromNotifications<T>(
             IEnumerable<Recorded<Notification<T>>> notifications,
             IReadOnlyDictionary<T, char> values)
         {
             var modifiedNotifications = values == null 
                 ? notifications.Select(p => p.CastToChar()) 
                 : notifications.Select(p => p.CastToChar(values));
-            return ParseNotifications(modifiedNotifications, throwOnError: false);
+            return FromNotifications(modifiedNotifications, throwOnError: false);
         }
 
-        public static string ParseNotifications<T>(
+        public static string FromNotifications<T>(
             IEnumerable<Recorded<Notification<T>>> notifications,
             IReadOnlyDictionary<T, char> values,
             bool throwOnError = true)
         {
             var modifiedNotifications = notifications.Select(p => p.CastToChar(values));
-            return ParseNotifications(modifiedNotifications);
+            return FromNotifications(modifiedNotifications);
         }
 
-        public static string ParseNotifications(
+        // TODO change bool to TryXX
+        public static string FromNotifications(
             IEnumerable<Recorded<Notification<char>>> notifications,
             bool throwOnError = true)
         {

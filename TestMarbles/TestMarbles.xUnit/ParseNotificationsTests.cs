@@ -17,7 +17,7 @@ namespace TestMarbles.xUnit
             var n = new List<Recorded<Notification<char>>>
             {  
             };
-            var actual = TestSchedulerEx.ParseNotifications(n);
+            var actual = Marbles.FromNotifications(n);
             Assert.Equal("", actual);
         }
 
@@ -28,7 +28,7 @@ namespace TestMarbles.xUnit
             {
                 OnNext(0, 'a')
             };
-            var actual = TestSchedulerEx.ParseNotifications(n);
+            var actual = Marbles.FromNotifications(n);
             Assert.Equal("a", actual);
         }
 
@@ -39,7 +39,7 @@ namespace TestMarbles.xUnit
             {
                 OnError<char>(0, new Exception())
             };
-            var actual = TestSchedulerEx.ParseNotifications(n);
+            var actual = Marbles.FromNotifications(n);
             Assert.Equal("#", actual);
         }
 
@@ -50,7 +50,7 @@ namespace TestMarbles.xUnit
             {
                 OnCompleted<char>(0)
             };
-            var actual = TestSchedulerEx.ParseNotifications(n);
+            var actual = Marbles.FromNotifications(n);
             Assert.Equal("|", actual);
         }
 
@@ -63,7 +63,7 @@ namespace TestMarbles.xUnit
                 OnNext(50, 'Y'),
                 OnCompleted<char>(60)
             };
-            var actual = TestSchedulerEx.ParseNotifications(n);
+            var actual = Marbles.FromNotifications(n);
             Assert.Equal("-X---Y|", actual);
         }
 
@@ -76,7 +76,7 @@ namespace TestMarbles.xUnit
                 OnNext(50, 'Y'),
                 OnCompleted<char>(50)
             };
-            var actual = TestSchedulerEx.ParseNotifications(n);
+            var actual = Marbles.FromNotifications(n);
             Assert.Equal("-X---(Y|)", actual);
         }
     }

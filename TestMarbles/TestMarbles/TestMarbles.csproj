@@ -64,17 +64,17 @@
     <Compile Include="Helpers\ReverseKeyValue.cs" />
     <Compile Include="Extensions\CreateColdObservable.cs" />
     <Compile Include="Extensions\CreateHotObservable.cs" />
-    <Compile Include="CreateTime.cs" />
+    <Compile Include="ToCompletionTime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Helpers\CastToChar.cs" />
     <Compile Include="Helpers\Materialize.cs" />
     <Compile Include="MarbleScheduler.cs" />
     <Compile Include="TestExpectation.cs" />
-    <Compile Include="ParseNotifications.cs" />
+    <Compile Include="FromNotifications.cs" />
     <Compile Include="ToBe.cs" />
-    <Compile Include="ParseMarbles.cs" />
-    <Compile Include="ParseMarblesAsSubscriptions.cs" />
+    <Compile Include="ToNotificaions.cs" />
+    <Compile Include="ToSubscription.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
