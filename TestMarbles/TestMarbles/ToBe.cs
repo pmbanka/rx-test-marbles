@@ -36,7 +36,7 @@ namespace TestMarbles
         public void ToBe(params string[] marbles)
         {
             _expectation.Expected = marbles
-                .Select(m => Marbles.ToSubscription(m))
+                .Select(Marbles.ToSubscription)
                 .ToList();
             _expectation.Ready = true;
         }
