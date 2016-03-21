@@ -9,6 +9,7 @@ using Microsoft.Reactive.Testing;
 using Xunit;
 using Xunit.Abstractions;
 using System.Reactive.Concurrency;
+using TestMarbles.Extensions;
 
 namespace TestMarbles.xUnit
 {

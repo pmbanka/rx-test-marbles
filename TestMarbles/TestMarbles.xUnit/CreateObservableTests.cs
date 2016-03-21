@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Extensions;
 using Xunit;
 
 namespace TestMarbles.xUnit
