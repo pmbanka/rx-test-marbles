@@ -20,7 +20,7 @@ namespace TestMarbles.xUnit
         {
             var result = Marbles.ToSubscription("---^-");
             result.Subscribe.Should().Be(30);
-            result.Unsubscribe.Should().Be(long.MaxValue);
+            result.Unsubscribe.Should().Be(Subscription.Infinite);
         }
 
         [Fact]

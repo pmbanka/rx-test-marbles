@@ -8,8 +8,8 @@ namespace TestMarbles
         public static Subscription ToSubscription(string marbles)
         {
             long groupStart = -1;
-            long subscriptionFrame = long.MaxValue;
-            long unsubscriptionFrame = long.MaxValue;
+            long subscriptionFrame = Subscription.Infinite;
+            long unsubscriptionFrame = Subscription.Infinite;
             for (int i = 0; i < marbles.Length; i++)
             {
                 var frame = i*Constants.FrameTimeFactor;
@@ -26,7 +26,7 @@ namespace TestMarbles
                         groupStart = -1;
                         break;
                     case '^':
-                        if (subscriptionFrame != long.MaxValue)
+                        if (subscriptionFrame != Subscription.Infinite)
                         {
                             throw new ArgumentException(
                                 $"Found a second subscription point '^' in a {marbles} subscription marble diagram. There can be only one.",
@@ -35,7 +35,7 @@ namespace TestMarbles
                         subscriptionFrame = groupStart > -1 ? groupStart : frame;
                         break;
                     case '!':
-                        if (unsubscriptionFrame != long.MaxValue)
+                        if (unsubscriptionFrame != Subscription.Infinite)
                         {
                             // TODO FIX IN JS
                             throw new ArgumentException(
@@ -49,9 +49,8 @@ namespace TestMarbles
                             $"There can only be '^' and '!' markers in a {marbles} subscription marble diagram. Found instead {c}.");
                 }
             }
-            return unsubscriptionFrame < 0
-                ? new Subscription(subscriptionFrame)
-                : new Subscription(subscriptionFrame, unsubscriptionFrame);
+            // TODO check js
+            return new Subscription(subscriptionFrame, unsubscriptionFrame);
         }
     }
 }
