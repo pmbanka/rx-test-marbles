@@ -61,13 +61,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\ReverseKeyValue.cs" />
     <Compile Include="CreateColdObservable.cs" />
     <Compile Include="CreateHotObservable.cs" />
     <Compile Include="CreateTime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
-    <Compile Include="Helpers\Extensions.cs" />
-    <Compile Include="Helpers\MaterializedEnumerable.cs" />
+    <Compile Include="Helpers\CastToChar.cs" />
+    <Compile Include="Helpers\Materialize.cs" />
     <Compile Include="MarbleScheduler.cs" />
     <Compile Include="TestExpectation.cs" />
     <Compile Include="ParseNotifications.cs" />
