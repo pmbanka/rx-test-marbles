@@ -8,18 +8,16 @@ namespace TestMarbles.xUnit
     public class CreateTimeTests
     {
         [Fact]
-        public void CrateTime_should_parse_simple_marbles_to_time()
+        public void ToCompletionTime_should_parse_simple_marbles_to_time()
         {
-            var scheduler = new TestScheduler();
-            var actual = scheduler.CreateTime("-----|");
+            var actual = Marbles.ToCompletionTime("-----|");
             actual.Should().Be(50);
         }
 
         [Fact]
-        public void CreteTime_should_throw_if_input_without_end_marker()
+        public void ToCompletionTime_should_throw_if_input_without_end_marker()
         {
-            var scheduler = new TestScheduler();
-            Action action = () => scheduler.CreateTime("--a--b-#");
+            Action action = () => Marbles.ToCompletionTime("--a--b-#");
             action.ShouldThrow<ArgumentException>();
         }
     }
