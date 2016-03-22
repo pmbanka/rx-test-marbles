@@ -56,10 +56,11 @@ namespace TestMarbles
             }
             var exVal = expected.Value;
             var acVal = actual.Value;
+            var time = actual.Time;
             if (exVal.Kind != acVal.Kind)
             {
                 throw new ExpectObservableToBeFailedException(
-                    $"Types of elements at index {index} do not match. Expected {exVal.Kind} but was {acVal.Kind}",
+                    $"Types of elements at time {time} (index {index}) do not match. Expected {exVal.Kind} but was {acVal.Kind}",
                     ExpectedMarbles,
                     ActualMarbles,
                     markerPosition);
@@ -67,7 +68,7 @@ namespace TestMarbles
             if (exVal.Kind == NotificationKind.OnError && exVal.Exception.GetType() != acVal.Exception.GetType())
             {               
                 throw new ExpectObservableToBeFailedException(
-                    $"Errors of elements at index {index} do not match. Expected {exVal.Exception.GetType()} but was {acVal.Exception.GetType()}",
+                    $"Errors at time {time} (index {index}) do not match. Expected {exVal.Exception.GetType()} but was {acVal.Exception.GetType()}",
                     ExpectedMarbles,
                     ActualMarbles,
                     markerPosition);
@@ -75,7 +76,7 @@ namespace TestMarbles
             if (exVal.Kind == NotificationKind.OnNext && !exVal.Value.Equals(acVal.Value))
             {
                 throw new ExpectObservableToBeFailedException(
-                    $"Elements at index {index} do not match. Expected {exVal.Value} but was {acVal.Value}",
+                    $"Elements at time {time} (index {index}) do not match. Expected {exVal.Value} but was {acVal.Value}",
                     ExpectedMarbles,
                     ActualMarbles,
                     markerPosition);
