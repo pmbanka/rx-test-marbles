@@ -85,6 +85,16 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
                     .ToBe(expected, dict);
             }
         }
+
+        [Fact]
+        public void ExpectObservable_should_accept_unsubscription_marble_diagram()
+        {
+            var s = new MarbleScheduler();
+            var source = s.Hot("---^-a-b-|");
+            var unsubscribe =     "---!";
+            var expected =        "--a";
+            s.ExpectObservable(source, unsubscribe).ToBe(expected);
+        }
     }
     
 }
