@@ -14,8 +14,7 @@ namespace TestMarbles
         public static IEnumerable<Recorded<Notification<char>>> ToNotifications(string marbles, Exception error = null)
         {
             Ensure.NotNull(marbles, nameof(marbles));
-            var fakeDictionary = new FakeDictionary<char>();
-            return ToNotifications(marbles, fakeDictionary, error);
+            return ToNotifications(marbles, new EchoDictionary<char>(), error);
         }
 
         public static IEnumerable<Recorded<Notification<T>>> ToNotifications<T>(

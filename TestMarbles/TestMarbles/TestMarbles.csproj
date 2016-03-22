@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Internal\ColdObservable.cs" />
-    <Compile Include="Helpers\FakeDictionary.cs" />
+    <Compile Include="Helpers\EchoDictionary.cs" />
     <Compile Include="Helpers\Ensure.cs" />
     <Compile Include="Internal\HotObservable.cs" />
     <Compile Include="Extensions\CreateColdObservable.cs" />
