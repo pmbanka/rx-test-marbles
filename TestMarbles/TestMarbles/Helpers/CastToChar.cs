@@ -16,7 +16,7 @@ namespace TestMarbles.Helpers
             switch (oldNotification.Value.Kind)
             {
                 case NotificationKind.OnNext:
-                    newNotification = Notification.CreateOnNext(oldNotification.Value.Value.CastToChar());
+                    newNotification = Notification.CreateOnNext((char)(object)oldNotification.Value.Value);
                     break;
                 case NotificationKind.OnError:
                     newNotification = Notification.CreateOnError<char>(oldNotification.Value.Exception);
@@ -51,10 +51,5 @@ namespace TestMarbles.Helpers
             }
             return new Recorded<Notification<char>>(oldNotification.Time, newNotification);
         }
-
-        public static char CastToChar<T>(this T value)
-        {
-            return (char)(object)value;
-        }    
     }
 }
