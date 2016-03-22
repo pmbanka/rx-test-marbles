@@ -97,6 +97,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="ExtensionsTests\CreateObservableTests.cs" />
+    <Compile Include="MarbleSchedulerTests\ExpectSubscriptionTests.cs" />
     <Compile Include="MarblesTests\ToCompletionTimeTests.cs" />
     <Compile Include="MarbleSchedulerTests\ExpectObservableTests.cs" />
     <Compile Include="MarblesTests\ToSubscriptionTests.cs" />

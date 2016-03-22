@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
@@ -17,6 +18,7 @@ namespace TestMarbles
             string marbles,
             Exception error = null)
         {
+            Ensure.NotNull(marbles, nameof(marbles));
             _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, error));
             _expectation.Ready = true;
         }
@@ -36,6 +38,8 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values,
             Exception error = null)
         {
+            Ensure.NotNull(marbles, nameof(marbles));
+            Ensure.NotNull(values, nameof(values));
             _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, values, error));
             _expectation.Values = values;
             _expectation.Ready = true;
@@ -51,11 +55,10 @@ namespace TestMarbles
             _expectation = expectation;
         }
 
-        public void ToBe(params string[] marbles)
+        public void ToBe(string marbles)
         {
-            _expectation.Expected = marbles
-                .Select(Marbles.ToSubscription)
-                .ToList();
+            Ensure.NotNull(marbles, nameof(marbles));
+            _expectation.Expected = Marbles.ToSubscription(marbles);
             _expectation.Ready = true;
         }
     }

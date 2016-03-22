@@ -99,40 +99,26 @@ namespace TestMarbles
 
     internal class SubscriptionExpectation : TestExpectation
     {
-        public SubscriptionExpectation()
-        {
-            Actual = new List<Subscription>();
-            Expected = new List<Subscription>();
-        }
+        public Subscription Actual { get; set; }
 
-        public List<Subscription> Actual { get; set; }
-
-        public List<Subscription> Expected { get; set; }
+        public Subscription Expected { get; set; }
 
         public override void Assert()
         {
-            if (Expected.Count != Actual.Count)
-            {
-                throw new ExpectSubscriptionToBeFailedException(
-                    $"Different number of subscriptions were provided. Expected {Expected.Count} but was {Actual.Count}");
-            }
-            for (int i = 0; i < Actual.Count; i++)
-            {
-                Assert(Expected[i], Actual[i], i);
-            }
+            Assert(Expected, Actual);
         }
 
-        private void Assert(Subscription expected, Subscription actual, int index)
+        private static void Assert(Subscription expected, Subscription actual)
         {
             if (expected.Subscribe != actual.Subscribe)
             {
                 throw new ExpectSubscriptionToBeFailedException(
-                    $"Subscription time at index {index} do not match. Expected {expected.Subscribe} but was {actual.Subscribe}");
+                    $"Subscription time do not match. Expected {expected.Subscribe} but was {actual.Subscribe}");
             }
             if (expected.Unsubscribe != actual.Unsubscribe)
             {
                 throw new ExpectSubscriptionToBeFailedException(
-                    $"Unsubscription time at index {index} do not match. Expected {expected.Unsubscribe} but was {actual.Unsubscribe}");
+                    $"Unsubscription time do not match. Expected {expected.Unsubscribe} but was {actual.Unsubscribe}");
             }
         }
     }
