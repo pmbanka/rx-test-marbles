@@ -10,6 +10,8 @@ namespace TestMarbles
 {
     public class MarbleScheduler : VirtualTimeScheduler<long, long>, IDisposable
     {
+        public const long FrameTimeFactor = 10;
+
         protected override long Add(long absolute, long relative) => absolute + relative;
 
         protected override DateTimeOffset ToDateTimeOffset(long absolute) => new DateTimeOffset(absolute, TimeSpan.Zero);

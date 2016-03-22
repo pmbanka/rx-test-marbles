@@ -93,10 +93,10 @@ namespace TestMarbles
             foreach (var entry in entries)
             {
                 var notification = entry.Value.Notification;
-                if (notification.Time%Constants.FrameTimeFactor != 0)
+                if (notification.Time%MarbleScheduler.FrameTimeFactor != 0)
                 {
                     var message =
-                        $"Notifications cannot have times not being a multiple of {Constants.FrameTimeFactor} (in that case, {notification.Time})";
+                        $"Notifications cannot have times not being a multiple of {MarbleScheduler.FrameTimeFactor} (in that case, {notification.Time})";
                     throw new ArgumentException(message, nameof(notifications));
                 }
                 var dashes = GetNumberOfDashes(notification, lastNotificationTime, entry.IsFirst);
@@ -130,7 +130,7 @@ namespace TestMarbles
 
         private static int GetNumberOfDashes(Recorded<Notification<char>> notification, long lastNotificationTime, bool isFirst)
         {
-            var d = (notification.Time - lastNotificationTime - (isFirst ? 0 : Constants.FrameTimeFactor))/Constants.FrameTimeFactor;
+            var d = (notification.Time - lastNotificationTime - (isFirst ? 0 : MarbleScheduler.FrameTimeFactor))/MarbleScheduler.FrameTimeFactor;
             var dashes = (int) Math.Max(d, 0);
             return dashes;
         }

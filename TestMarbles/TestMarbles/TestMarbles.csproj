@@ -69,7 +69,6 @@
     <Compile Include="Extensions\CreateHotObservable.cs" />
     <Compile Include="Marker.cs" />
     <Compile Include="ToCompletionTime.cs" />
-    <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Helpers\CastToChar.cs" />
     <Compile Include="Helpers\Materialize.cs" />

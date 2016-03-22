@@ -35,11 +35,11 @@ namespace TestMarbles
 
             // TODO handle cold observables in T
             long subscribeIndex = marbles.IndexOf(Marker.Subscription);
-            long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -Constants.FrameTimeFactor;
+            long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -MarbleScheduler.FrameTimeFactor;
             long groupStart = -1;
             for (int i = 0; i < marbles.Length; i++)
             {
-                long frame = i * Constants.FrameTimeFactor + frameOffset;
+                long frame = i * MarbleScheduler.FrameTimeFactor + frameOffset;
                 Notification<T> notification = null;
                 var c = marbles[i];
                 switch (c)

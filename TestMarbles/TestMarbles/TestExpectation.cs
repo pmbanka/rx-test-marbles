@@ -45,7 +45,7 @@ namespace TestMarbles
 
         private void Assert(Recorded<Notification<T>> expected, Recorded<Notification<T>> actual, int index)
         {
-            var markerPosition = (int)(actual.Time/Constants.FrameTimeFactor) + GetNumberOfGroupsBefore(actual) * 2 + 1;
+            var markerPosition = (int)(actual.Time/MarbleScheduler.FrameTimeFactor) + GetNumberOfGroupsBefore(actual) * 2 + 1;
             if (expected.Time != actual.Time)
             {
                 throw new ExpectObservableToBeFailedException(

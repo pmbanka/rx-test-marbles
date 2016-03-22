@@ -14,7 +14,7 @@ namespace TestMarbles
             long unsubscriptionFrame = Subscription.Infinite;
             for (int i = 0; i < marbles.Length; i++)
             {
-                var frame = i*Constants.FrameTimeFactor;
+                var frame = i*MarbleScheduler.FrameTimeFactor;
                 var c = marbles[i];
                 switch (c)
                 {
