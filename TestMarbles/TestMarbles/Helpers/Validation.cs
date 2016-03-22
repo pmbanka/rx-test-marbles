@@ -20,6 +20,22 @@ namespace TestMarbles.Helpers
             }
         }
 
-        
+        public static void CheckIfContainsMarkers<T>(this IEnumerable<KeyValuePair<char, T>> dict, string argumentName)
+        {
+            var marker = dict.Select(p => p.Key).FirstOrDefault(p => Marker.All.Contains(p));
+            if (marker != default(char))
+            {
+                throw new ArgumentException($"Dictionary cannot contain mapping for a special \"{marker}\" marker.", argumentName);
+            }
+        }
+
+        public static void CheckIfContainsMarkers<T>(this IEnumerable<KeyValuePair<T, char>> dict, string argumentName)
+        {
+            var marker = dict.Select(p => p.Value).FirstOrDefault(p => Marker.All.Contains(p));
+            if (marker != default(char))
+            {
+                throw new ArgumentException($"Dictionary cannot contain mapping for a special \"{marker}\" marker.", argumentName);
+            }
+        }
     }
 }

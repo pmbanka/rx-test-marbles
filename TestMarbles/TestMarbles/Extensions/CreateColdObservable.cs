@@ -45,6 +45,7 @@ namespace TestMarbles.Extensions
                 throw new ArgumentNullException(nameof(scheduler));
             }
             marbles.CheckIfValidColdObservable(nameof(marbles));
+            values.CheckIfContainsMarkers(nameof(values));
             var events = Marbles.ToNotifications(marbles, values, error).ToArray();
             return scheduler.CreateColdObservable(events);
         }

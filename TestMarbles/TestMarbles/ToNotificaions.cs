@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
@@ -12,19 +13,29 @@ namespace TestMarbles
     {
         public static IEnumerable<Recorded<Notification<char>>> ToNotifications(string marbles, Exception error = null)
         {
+            if (marbles == null)
+            {
+                throw new ArgumentNullException(nameof(marbles));
+            }
             return ToNotifications<char>(marbles, null, error);
         }
 
         public static IEnumerable<Recorded<Notification<T>>> ToNotifications<T>(
             string marbles,
-            IReadOnlyDictionary<char, T> values,
+            IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
         {
+            if (marbles == null)
+            {
+                throw new ArgumentNullException(nameof(marbles));
+            }
             if (marbles.Contains(Marker.Unsubscription))
             {
                 throw new ArgumentException($"Conventional marble diagrams cannot have unsubscription marker '{Marker.Unsubscription}'",
                     nameof(marbles));
             }
+            values?.CheckIfContainsMarkers(nameof(values));
+            
             // TODO handle cold observables in T
             long subscribeIndex = marbles.IndexOf(Marker.Subscription);
             long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -Constants.FrameTimeFactor;

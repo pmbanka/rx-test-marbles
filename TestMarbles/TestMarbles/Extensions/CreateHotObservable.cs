@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles.Extensions
 {
@@ -42,6 +43,7 @@ namespace TestMarbles.Extensions
             {
                 throw new ArgumentNullException(nameof(values));
             }
+            values.CheckIfContainsMarkers(nameof(values));
             var events = Marbles.ToNotifications(marbles, values, error).ToArray();
             return scheduler.CreateHotObservable(events);
         }

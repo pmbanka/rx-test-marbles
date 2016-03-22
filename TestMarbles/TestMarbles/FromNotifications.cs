@@ -71,6 +71,7 @@ namespace TestMarbles
             {
                 throw new ArgumentNullException(nameof(values));
             }
+            values.CheckIfContainsMarkers(nameof(values));
             var modifiedNotifications = notifications.Select(p => p.CastToChar(values));
             return FromNotifications(modifiedNotifications);
         }
