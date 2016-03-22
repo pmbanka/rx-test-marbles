@@ -17,7 +17,9 @@ namespace TestMarbles
             var modifiedNotifications = values == null 
                 ? notifications.Select(p => p.CastToChar()) 
                 : notifications.Select(p => p.ConvertToChar(values));
-            return FromNotifications(modifiedNotifications);
+            string marblesOrError;
+            TryFromNotifications(modifiedNotifications, out marblesOrError, out marblesOrError);
+            return marblesOrError;
         }
 
         public static bool TryFromNotifications<T>(
@@ -28,14 +30,14 @@ namespace TestMarbles
         {
             try
             {
-                marbles = FromNotifications(notifications, values);
                 errorMessage = null;
+                marbles = FromNotifications(notifications, values);
                 return true;
             }
             catch (Exception ex)
             {
-                errorMessage = $"Could not generate marbles: {ex.Message}";
                 marbles = null;
+                errorMessage = $"Could not generate marbles: {ex.Message}";
                 return false;
             }
         }
@@ -47,14 +49,14 @@ namespace TestMarbles
         {
             try
             {
-                marbles = FromNotifications(notifications);
                 errorMessage = null;
+                marbles = FromNotifications(notifications);
                 return true;
             }
             catch (Exception ex)
             {
-                errorMessage = $"Could not generate marbles: {ex.Message}";
                 marbles = null;
+                errorMessage = $"Could not generate marbles: {ex.Message}";
                 return false;
             }
         }
