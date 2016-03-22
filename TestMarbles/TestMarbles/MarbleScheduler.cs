@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
@@ -28,15 +29,21 @@ namespace TestMarbles
             string marbles,
             Exception error = null)
         {
-            return Cold<char>(marbles, null, error);
+            Ensure.NotNull(marbles, nameof(marbles));
+            Ensure.ValidColdObservable(marbles, nameof(marbles));
+            var messages = Marbles.ToNotifications(marbles, error);
+            return new ColdObservable<char>(this, messages);
         }
 
         public ITestableObservable<T> Cold<T>(
             string marbles,
-            IReadOnlyDictionary<char, T> values = null,
+            IReadOnlyDictionary<char, T> values,
             Exception error = null)
         {
-            // TODO input validation
+            Ensure.NotNull(marbles, nameof(marbles));
+            Ensure.NotNull(values, nameof(values));
+            Ensure.ValidColdObservable(marbles, nameof(marbles));
+            Ensure.NotContainsMarkers(values, nameof(values));
             var messages = Marbles.ToNotifications(marbles, values, error);
             return new ColdObservable<T>(this, messages);
         }
@@ -45,15 +52,19 @@ namespace TestMarbles
             string marbles,
             Exception error = null)
         {
-            return Hot<char>(marbles, null, error);
+            Ensure.NotNull(marbles, nameof(marbles));
+            var messages = Marbles.ToNotifications(marbles, error);
+            return new HotObservable<char>(this, messages);
         }
 
         public ITestableObservable<T> Hot<T>(
             string marbles,
-            IReadOnlyDictionary<char, T> values = null,
+            IReadOnlyDictionary<char, T> values,
             Exception error = null)
         {
-            // TODO input validation
+            Ensure.NotNull(marbles, nameof(marbles));
+            Ensure.NotNull(values, nameof(values));
+            Ensure.NotContainsMarkers(values, nameof(values));
             var messages = Marbles.ToNotifications(marbles, values, error);
             return new HotObservable<T>(this, messages);
         }
@@ -76,6 +87,7 @@ namespace TestMarbles
             IObservable<T> observable,
             string unsubscriptionMarbles = null)
         {
+            Ensure.NotNull(observable, nameof(observable));
             var expectation = new ObservableExpectation<T>();
             var unsubscriptionFrame = unsubscriptionMarbles != null
                 ? Marbles.ToSubscription(unsubscriptionMarbles).Unsubscribe
@@ -102,6 +114,7 @@ namespace TestMarbles
 
         public SubscriptionToBe ExpectSubscriptions(params Subscription[] subscriptions)
         {
+            Ensure.NotNull(subscriptions, nameof(subscriptions));
             var test = new SubscriptionExpectation
             {
                 Actual = subscriptions.ToList()

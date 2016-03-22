@@ -13,14 +13,8 @@ namespace TestMarbles.Extensions
             string marbles,
             Exception error = null)
         {
-            if (scheduler == null)
-            {
-                throw new ArgumentNullException(nameof(scheduler));
-            }
-            if (marbles == null)
-            {
-                throw new ArgumentNullException(nameof(marbles));
-            }
+            Ensure.NotNull(scheduler, nameof(scheduler));
+            Ensure.NotNull(marbles, nameof(marbles));
             var events = Marbles.ToNotifications(marbles, error).ToArray();
             return scheduler.CreateHotObservable(events);
         }
@@ -31,19 +25,10 @@ namespace TestMarbles.Extensions
             IReadOnlyDictionary<char, T> values,
             Exception error = null)
         {
-            if (scheduler == null)
-            {
-                throw new ArgumentNullException(nameof(scheduler));
-            }
-            if (marbles == null)
-            {
-                throw new ArgumentNullException(nameof(marbles));
-            }
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
-            values.CheckIfContainsMarkers(nameof(values));
+            Ensure.NotNull(scheduler, nameof(scheduler));
+            Ensure.NotNull(marbles, nameof(marbles));
+            Ensure.NotNull(values, nameof(values));
+            Ensure.NotContainsMarkers(values, nameof(values));
             var events = Marbles.ToNotifications(marbles, values, error).ToArray();
             return scheduler.CreateHotObservable(events);
         }

@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
@@ -15,14 +16,8 @@ namespace TestMarbles
 
         public ColdObservable(VirtualTimeScheduler<long, long> scheduler, IEnumerable<Recorded<Notification<T>>> messages)
         {
-            if (scheduler == null)
-            {
-                throw new ArgumentNullException(nameof(scheduler));
-            }
-            if (messages == null)
-            {
-                throw new ArgumentNullException(nameof(messages));
-            }
+            Ensure.NotNull(scheduler, nameof(scheduler));
+            Ensure.NotNull(messages, nameof(messages));
             _scheduler = scheduler;
             Messages = messages.ToList();
             Subscriptions = new List<Subscription>();

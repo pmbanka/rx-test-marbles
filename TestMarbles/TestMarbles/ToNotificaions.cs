@@ -13,10 +13,7 @@ namespace TestMarbles
     {
         public static IEnumerable<Recorded<Notification<char>>> ToNotifications(string marbles, Exception error = null)
         {
-            if (marbles == null)
-            {
-                throw new ArgumentNullException(nameof(marbles));
-            }
+            Ensure.NotNull(marbles, nameof(marbles));
             return ToNotifications<char>(marbles, null, error);
         }
 
@@ -25,17 +22,17 @@ namespace TestMarbles
             IReadOnlyDictionary<char, T> values = null,
             Exception error = null)
         {
-            if (marbles == null)
-            {
-                throw new ArgumentNullException(nameof(marbles));
-            }
+            Ensure.NotNull(marbles, nameof(marbles));
             if (marbles.Contains(Marker.Unsubscription))
             {
                 throw new ArgumentException($"Conventional marble diagrams cannot have unsubscription marker '{Marker.Unsubscription}'",
                     nameof(marbles));
             }
-            values?.CheckIfContainsMarkers(nameof(values));
-            
+            if (values != null)
+            {
+                Ensure.NotContainsMarkers(values, nameof(values));
+            }
+
             // TODO handle cold observables in T
             long subscribeIndex = marbles.IndexOf(Marker.Subscription);
             long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -Constants.FrameTimeFactor;

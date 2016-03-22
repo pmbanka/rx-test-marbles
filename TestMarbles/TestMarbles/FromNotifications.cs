@@ -63,25 +63,16 @@ namespace TestMarbles
             IEnumerable<Recorded<Notification<T>>> notifications,
             IReadOnlyDictionary<T, char> values)
         {
-            if (notifications == null)
-            {
-                throw new ArgumentNullException(nameof(notifications));
-            }
-            if (values == null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
-            values.CheckIfContainsMarkers(nameof(values));
+            Ensure.NotNull(notifications, nameof(notifications));
+            Ensure.NotNull(values, nameof(values));
+            Ensure.NotContainsMarkers(values, nameof(values));
             var modifiedNotifications = notifications.Select(p => p.CastToChar(values));
             return FromNotifications(modifiedNotifications);
         }
 
         public static string FromNotifications(IEnumerable<Recorded<Notification<char>>> notifications)
         {
-            if (notifications == null)
-            {
-                throw new ArgumentNullException(nameof(notifications));
-            }
+            Ensure.NotNull(notifications, nameof(notifications));
             var builder = new StringBuilder();
             var entries = notifications
                 .GroupBy(n => n.Time)

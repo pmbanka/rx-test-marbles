@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace TestMarbles.Helpers
 {
-    internal static partial class Helpers
+    internal static class Ensure
     {
-        public static void CheckIfValidColdObservable(this string marbles, string argumentName)
+        public static void ValidColdObservable(string marbles, string argumentName)
         {
             if (marbles.Contains(Marker.Subscription))
             {
@@ -20,7 +20,7 @@ namespace TestMarbles.Helpers
             }
         }
 
-        public static void CheckIfContainsMarkers<T>(this IEnumerable<KeyValuePair<char, T>> dict, string argumentName)
+        public static void NotContainsMarkers<T>(IEnumerable<KeyValuePair<char, T>> dict, string argumentName)
         {
             var marker = dict.Select(p => p.Key).FirstOrDefault(p => Marker.All.Contains(p));
             if (marker != default(char))
@@ -29,12 +29,20 @@ namespace TestMarbles.Helpers
             }
         }
 
-        public static void CheckIfContainsMarkers<T>(this IEnumerable<KeyValuePair<T, char>> dict, string argumentName)
+        public static void NotContainsMarkers<T>(IEnumerable<KeyValuePair<T, char>> dict, string argumentName)
         {
             var marker = dict.Select(p => p.Value).FirstOrDefault(p => Marker.All.Contains(p));
             if (marker != default(char))
             {
                 throw new ArgumentException($"Dictionary cannot contain mapping for a special \"{marker}\" marker.", argumentName);
+            }
+        }
+
+        public static void NotNull<T>(T value, string argumentName)
+        {
+            if (value == null)
+            {
+                throw new ArgumentNullException(argumentName);
             }
         }
     }

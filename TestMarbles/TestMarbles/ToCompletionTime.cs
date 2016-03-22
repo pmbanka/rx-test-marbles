@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
@@ -11,6 +12,7 @@ namespace TestMarbles
     {
         public static long ToCompletionTime(string marbles)
         {
+            Ensure.NotNull(marbles, nameof(marbles));
             var indexOf = marbles.IndexOf(Marker.Completed);
             if (indexOf == -1)
             {

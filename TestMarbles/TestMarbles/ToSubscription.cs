@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Reactive.Testing;
+using TestMarbles.Helpers;
 
 namespace TestMarbles
 {
@@ -7,6 +8,7 @@ namespace TestMarbles
     {
         public static Subscription ToSubscription(string marbles)
         {
+            Ensure.NotNull(marbles, nameof(marbles));
             long groupStart = -1;
             long subscriptionFrame = Subscription.Infinite;
             long unsubscriptionFrame = Subscription.Infinite;

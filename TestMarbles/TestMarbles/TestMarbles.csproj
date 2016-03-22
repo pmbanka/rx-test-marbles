@@ -63,10 +63,11 @@
   <ItemGroup>
     <Compile Include="ColdObservable.cs" />
     <Compile Include="Helpers\ReverseKeyValue.cs" />
-    <Compile Include="Helpers\Validation.cs" />
+    <Compile Include="Helpers\Ensure.cs" />
     <Compile Include="HotObservable.cs" />
     <Compile Include="Extensions\CreateColdObservable.cs" />
     <Compile Include="Extensions\CreateHotObservable.cs" />
+    <Compile Include="Marker.cs" />
     <Compile Include="ToCompletionTime.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Exceptions.cs" />
