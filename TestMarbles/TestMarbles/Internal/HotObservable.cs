@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Reactive;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;
 
-namespace TestMarbles
+namespace TestMarbles.Internal
 {
     // Copyright (c) Microsoft Open Technologies, Inc. All rights reserved. See License.txt in the project root for license information.
     internal class HotObservable<T> : ITestableObservable<T>

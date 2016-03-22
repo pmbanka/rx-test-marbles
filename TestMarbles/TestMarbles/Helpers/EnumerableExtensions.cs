@@ -1,9 +1,36 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace TestMarbles.Helpers
 {
     internal static partial class Helpers
     {
+        // Modified from http://stackoverflow.com/a/22595707/1108916
+        public static IReadOnlyDictionary<T, char> ReverseKeyValue<T>(this IEnumerable<KeyValuePair<char, T>> source)
+        {
+            var dictionary = new Dictionary<T, char>();
+            foreach (var entry in source)
+            {
+                if (!dictionary.ContainsKey(entry.Value))
+                {
+                    dictionary.Add(entry.Value, entry.Key);
+                }
+                else
+                {
+                    dictionary[entry.Value] = '?';
+                }
+            }
+            return dictionary;
+        }
+
+        public static IReadOnlyList<T> AsReadOnly<T>(this IList<T> collection)
+        {
+            Ensure.NotNull(collection, nameof(collection));
+            var list = collection as IReadOnlyList<T>;
+            return list ?? new ReadOnlyCollection<T>(collection);
+        }
+
         public static IEnumerable<MaterializedEnumerable<T>> Materialize<T>(this IEnumerable<T> self)
         {
             using (var enumerator = self.GetEnumerator())

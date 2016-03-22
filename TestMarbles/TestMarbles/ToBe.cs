@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TestMarbles.Helpers;
+using TestMarbles.Internal;
 
 namespace TestMarbles
 {
@@ -19,8 +20,7 @@ namespace TestMarbles
             Exception error = null)
         {
             Ensure.NotNull(marbles, nameof(marbles));
-            _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, error));
-            _expectation.Ready = true;
+            _expectation.HandleToBe(marbles, Marbles.ToNotifications(marbles, error));
         }
     }
 
@@ -40,9 +40,7 @@ namespace TestMarbles
         {
             Ensure.NotNull(marbles, nameof(marbles));
             Ensure.NotNull(values, nameof(values));
-            _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, values, error));
-            _expectation.Values = values;
-            _expectation.Ready = true;
+            _expectation.HandleToBe(marbles, Marbles.ToNotifications(marbles, values, error), values);
         }
     }
 
@@ -57,10 +55,8 @@ namespace TestMarbles
 
         public void ToBe(params string[] marbles)
         {
-            _expectation.Expected = marbles
-                .Select(Marbles.ToSubscription)
-                .ToList();
-            _expectation.Ready = true;
+            _expectation.HandleToBe(marbles
+                .Select(Marbles.ToSubscription));
         }
     }
 }

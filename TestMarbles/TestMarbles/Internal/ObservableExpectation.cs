@@ -1,32 +1,33 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;
 
-namespace TestMarbles
+namespace TestMarbles.Internal
 {
-    internal abstract class TestExpectation
-    {
-        public bool Ready { get; set; }
-
-        public abstract void Assert();
-    }
-
     internal class ObservableExpectation<T> : TestExpectation
     {
+        private readonly List<Recorded<Notification<T>>> _actual;
+
+        private readonly List<Recorded<Notification<T>>> _expected;
+
         public ObservableExpectation()
         {
-            Actual = new List<Recorded<Notification<T>>>();
-            Expected = new List<Recorded<Notification<T>>>();
+            _actual = new List<Recorded<Notification<T>>>();
+            _expected = new List<Recorded<Notification<T>>>();
         }
 
-        public List<Recorded<Notification<T>>> Actual { get; }
+        public IReadOnlyList<Recorded<Notification<T>>> Actual => _actual;
 
-        public List<Recorded<Notification<T>>> Expected { get; }
+        public IReadOnlyList<Recorded<Notification<T>>> Expected => _expected;
 
-        public IReadOnlyDictionary<char, T> Values { get; set; }
+        public IReadOnlyDictionary<char, T> Values { get; private set; }
+
+        public void AddNotification(long time, Notification<T> notification)
+        {
+            _actual.Add(new Recorded<Notification<T>>(time, notification));
+        }
 
         public override void Assert()
         {
@@ -91,50 +92,20 @@ namespace TestMarbles
                 .Count(g => g.Count() > 1);
         }
 
-        private string ActualMarbles => 
+        public string ActualMarbles => 
             Marbles.GetMarblesOrErrorMessage(Actual, Values?.ReverseKeyValue());
 
-        private string ExpectedMarbles => 
-            Marbles.GetMarblesOrErrorMessage(Expected, Values?.ReverseKeyValue());
-    }
+        public string ExpectedMarbles { get; private set; }
 
-    internal class SubscriptionExpectation : TestExpectation
-    {
-        public SubscriptionExpectation()
+        public void HandleToBe(
+            string expectedMarbles, 
+            IEnumerable<Recorded<Notification<T>>> expectedNotifications,
+            IReadOnlyDictionary<char, T> values = null)
         {
-            Actual = new List<Subscription>();
-            Expected = new List<Subscription>();
-        }
-
-        public IList<Subscription> Actual { get; set; }
-
-        public IList<Subscription> Expected { get; set; }
-
-        public override void Assert()
-        {
-            if (Expected.Count != Actual.Count)
-            {
-                throw new ExpectSubscriptionToBeFailedException(
-                    $"Different number of subscriptions were provided. Expected {Expected.Count} but was {Actual.Count}");
-            }
-            for (int i = 0; i < Actual.Count; i++)
-            {
-                Assert(Expected[i], Actual[i], i);
-            }
-        }
-
-        private void Assert(Subscription expected, Subscription actual, int index)
-        {
-            if (expected.Subscribe != actual.Subscribe)
-            {
-                //throw new ExpectSubscriptionToBeFailedException(
-                //    $"Subscription time at index {index} do not match. Expected {expected.Subscribe} but was {actual.Subscribe}");
-            }
-            if (expected.Unsubscribe != actual.Unsubscribe)
-            {
-                //throw new ExpectSubscriptionToBeFailedException(
-                //    $"Unsubscription time at index {index} do not match. Expected {expected.Unsubscribe} but was {actual.Unsubscribe}");
-            }
+            ExpectedMarbles = expectedMarbles;
+            _expected.AddRange(expectedNotifications);
+            Values = values;
+            Ready = true;
         }
     }
 }

@@ -61,20 +61,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColdObservable.cs" />
+    <Compile Include="Internal\ColdObservable.cs" />
     <Compile Include="Helpers\FakeDictionary.cs" />
-    <Compile Include="Helpers\ReverseKeyValue.cs" />
     <Compile Include="Helpers\Ensure.cs" />
-    <Compile Include="HotObservable.cs" />
+    <Compile Include="Internal\HotObservable.cs" />
     <Compile Include="Extensions\CreateColdObservable.cs" />
     <Compile Include="Extensions\CreateHotObservable.cs" />
     <Compile Include="Marker.cs" />
+    <Compile Include="Internal\ObservableExpectation.cs" />
+    <Compile Include="Internal\SubscriptionExpectation.cs" />
     <Compile Include="ToCompletionTime.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Helpers\CastToChar.cs" />
-    <Compile Include="Helpers\Materialize.cs" />
+    <Compile Include="Helpers\EnumerableExtensions.cs" />
     <Compile Include="MarbleScheduler.cs" />
-    <Compile Include="TestExpectation.cs" />
+    <Compile Include="Internal\TestExpectation.cs" />
     <Compile Include="FromNotifications.cs" />
     <Compile Include="ToBe.cs" />
     <Compile Include="ToNotificaions.cs" />

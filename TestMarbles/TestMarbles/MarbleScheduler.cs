@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;
+using TestMarbles.Internal;
 
 namespace TestMarbles
 {
@@ -118,10 +119,10 @@ namespace TestMarbles
                     x =>
                     {
                         // TODO handle observable-of-observable
-                        expectation.Actual.Add(new Recorded<Notification<T>>(Clock, Notification.CreateOnNext(x)));
+                        expectation.AddNotification(Clock, Notification.CreateOnNext(x));
                     },
-                    err => expectation.Actual.Add(new Recorded<Notification<T>>(Clock, Notification.CreateOnError<T>(err))),
-                    () => expectation.Actual.Add(new Recorded<Notification<T>>(Clock, Notification.CreateOnCompleted<T>())));
+                    err => expectation.AddNotification(Clock, Notification.CreateOnError<T>(err)),
+                    () => expectation.AddNotification(Clock, Notification.CreateOnCompleted<T>()));
             });
             if (unsubscriptionFrame != Subscription.Infinite)
             {
@@ -133,24 +134,16 @@ namespace TestMarbles
         public SubscriptionToBe ExpectSubscriptions(params Subscription[] subscriptions)
         {
             Ensure.NotNull(subscriptions, nameof(subscriptions));
-            var test = new SubscriptionExpectation
-            {
-                Actual = subscriptions.ToList()
-            };
-            _expectations.Add(test);
-            return new SubscriptionToBe(test);
+            return ExpectSubscriptions(subscriptions.ToList());
         }
 
         public SubscriptionToBe ExpectSubscriptions(IEnumerable<Subscription> subscriptions)
         {
             Ensure.NotNull(subscriptions, nameof(subscriptions));
-            var subs = subscriptions as IList<Subscription> ?? subscriptions.ToList();
-            var test = new SubscriptionExpectation
-            {
-                Actual = subs
-            };
-            _expectations.Add(test);
-            return new SubscriptionToBe(test);
+            var actual = subscriptions as IList<Subscription> ?? subscriptions.ToList();
+            var expectation = new SubscriptionExpectation(actual);
+            _expectations.Add(expectation);
+            return new SubscriptionToBe(expectation);
         }
 
         void IDisposable.Dispose()
