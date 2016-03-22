@@ -61,8 +61,7 @@ namespace TestMarbles
                         notification = Notification.CreateOnError<T>(error ?? new Exception());
                         break;
                     default:
-                        T value = values != null ? values[c] : (T)(object)c;
-                        notification = Notification.CreateOnNext(value);
+                        notification = Notification.CreateOnNext(values[c]);
                         break;
                 }
                 if (notification != null)
