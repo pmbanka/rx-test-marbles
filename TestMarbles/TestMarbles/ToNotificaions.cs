@@ -60,7 +60,12 @@ namespace TestMarbles
                         notification = Notification.CreateOnError<T>(error ?? new Exception());
                         break;
                     default:
-                        notification = Notification.CreateOnNext(values[c]);
+                        T newValue;
+                        if (!values.TryGetValue(c, out newValue))
+                        {
+                            throw new KeyNotFoundException($"Convertion to {typeof(T)} not found for OnNext marker \"{c}\"");
+                        }
+                        notification = Notification.CreateOnNext(newValue);
                         break;
                 }
                 if (notification != null)

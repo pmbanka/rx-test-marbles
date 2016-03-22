@@ -38,7 +38,13 @@ namespace TestMarbles.Helpers
             switch (oldNotification.Value.Kind)
             {
                 case NotificationKind.OnNext:
-                    newNotification = Notification.CreateOnNext(dict[oldNotification.Value.Value]);
+                    T oldValue = oldNotification.Value.Value;
+                    char newValue;
+                    if (!dict.TryGetValue(oldValue, out newValue))
+                    {
+                        throw new KeyNotFoundException($"Convertion to char not found for notification {oldNotification}");
+                    }
+                    newNotification = Notification.CreateOnNext(newValue);
                     break;
                 case NotificationKind.OnError:
                     newNotification = Notification.CreateOnError<char>(oldNotification.Value.Exception);
