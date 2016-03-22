@@ -85,11 +85,28 @@ namespace TestMarbles
             _expectationsChecked = true;
         }
 
+        public ObservableToBe ExpectObservable(
+            IObservable<char> observable,
+            string unsubscriptionMarbles = null)
+        {
+            Ensure.NotNull(observable, nameof(observable));
+            var expectation = CreateExpectation(observable, unsubscriptionMarbles);
+            _expectations.Add(expectation);
+            return new ObservableToBe(expectation);
+        }
+
         public ObservableToBe<T> ExpectObservable<T>(
             IObservable<T> observable,
             string unsubscriptionMarbles = null)
         {
             Ensure.NotNull(observable, nameof(observable));
+            var expectation = CreateExpectation(observable, unsubscriptionMarbles);
+            _expectations.Add(expectation);
+            return new ObservableToBe<T>(expectation);
+        }
+
+        private ObservableExpectation<T> CreateExpectation<T>(IObservable<T> observable, string unsubscriptionMarbles)
+        {
             var expectation = new ObservableExpectation<T>();
             var unsubscriptionFrame = unsubscriptionMarbles != null
                 ? Marbles.ToSubscription(unsubscriptionMarbles).Unsubscribe
@@ -110,8 +127,7 @@ namespace TestMarbles
             {
                 this.ScheduleAbsolute(unsubscriptionFrame, () => disposable.Dispose());
             }
-            _expectations.Add(expectation);
-            return new ObservableToBe<T>(expectation);
+            return expectation;
         }
 
         public SubscriptionToBe ExpectSubscriptions(params Subscription[] subscriptions)

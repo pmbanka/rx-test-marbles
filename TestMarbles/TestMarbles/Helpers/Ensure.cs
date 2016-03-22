@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Reactive.Testing;
 
 namespace TestMarbles.Helpers
 {
@@ -26,6 +28,19 @@ namespace TestMarbles.Helpers
             if (marker != default(char))
             {
                 throw new ArgumentException($"Dictionary cannot contain mapping for a special \"{marker}\" marker.", argumentName);
+            }
+        }
+
+        public static void NotContainsMarkers(IEnumerable<Recorded<Notification<char>>> notifications,
+            string argumentName)
+        {
+            var marker = notifications
+                .Where(p => p.Value.HasValue)
+                .Select(p => p.Value.Value)
+                .FirstOrDefault(p => Marker.All.Contains(p));
+            if (marker != default(char))
+            {
+                throw new ArgumentException($"Notifications cannot contain a special \"{marker}\" marker.", argumentName);
             }
         }
 

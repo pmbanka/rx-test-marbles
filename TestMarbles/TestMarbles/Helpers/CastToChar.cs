@@ -30,7 +30,7 @@ namespace TestMarbles.Helpers
             return new Recorded<Notification<char>>(oldNotification.Time, newNotification);
         }
 
-        public static Recorded<Notification<char>> CastToChar<T>(
+        public static Recorded<Notification<char>> ConvertToChar<T>(
             this Recorded<Notification<T>> oldNotification, 
             IReadOnlyDictionary<T, char> dict)
         {

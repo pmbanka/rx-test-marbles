@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColdObservable.cs" />
+    <Compile Include="Helpers\FakeDictionary.cs" />
     <Compile Include="Helpers\ReverseKeyValue.cs" />
     <Compile Include="Helpers\Ensure.cs" />
     <Compile Include="HotObservable.cs" />

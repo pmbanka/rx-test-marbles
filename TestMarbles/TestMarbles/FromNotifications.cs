@@ -16,7 +16,7 @@ namespace TestMarbles
         {
             var modifiedNotifications = values == null 
                 ? notifications.Select(p => p.CastToChar()) 
-                : notifications.Select(p => p.CastToChar(values));
+                : notifications.Select(p => p.ConvertToChar(values));
             return FromNotifications(modifiedNotifications);
         }
 
@@ -66,15 +66,17 @@ namespace TestMarbles
             Ensure.NotNull(notifications, nameof(notifications));
             Ensure.NotNull(values, nameof(values));
             Ensure.NotContainsMarkers(values, nameof(values));
-            var modifiedNotifications = notifications.Select(p => p.CastToChar(values));
+            var modifiedNotifications = notifications.Select(p => p.ConvertToChar(values));
             return FromNotifications(modifiedNotifications);
         }
 
         public static string FromNotifications(IEnumerable<Recorded<Notification<char>>> notifications)
         {
             Ensure.NotNull(notifications, nameof(notifications));
+            var input = notifications as IList<Recorded<Notification<char>>> ?? notifications.ToList();
+            Ensure.NotContainsMarkers(input, nameof(notifications));
             var builder = new StringBuilder();
-            var entries = notifications
+            var entries = input
                 .GroupBy(n => n.Time)
                 .SelectMany(group => group
                     .Materialize()

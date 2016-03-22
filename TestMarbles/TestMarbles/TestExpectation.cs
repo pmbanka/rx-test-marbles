@@ -64,10 +64,10 @@ namespace TestMarbles
                     ActualMarbles,
                     markerPosition);
             }
-            if (exVal.Kind == NotificationKind.OnError && exVal.Exception.Message != acVal.Exception.Message)
-            {
+            if (exVal.Kind == NotificationKind.OnError && exVal.Exception.GetType() != acVal.Exception.GetType())
+            {               
                 throw new ExpectObservableToBeFailedException(
-                    $"Errors of elements at index {index} do not match. Expected {exVal.Exception.Message} but was {acVal.Exception.Message}",
+                    $"Errors of elements at index {index} do not match. Expected {exVal.Exception.GetType()} but was {acVal.Exception.GetType()}",
                     ExpectedMarbles,
                     ActualMarbles,
                     markerPosition);

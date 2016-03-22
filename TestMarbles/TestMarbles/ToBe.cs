@@ -4,6 +4,24 @@ using System.Linq;
 
 namespace TestMarbles
 {
+    public class ObservableToBe
+    {
+        private readonly ObservableExpectation<char> _expectation;
+
+        internal ObservableToBe(ObservableExpectation<char> expectation)
+        {
+            _expectation = expectation;
+        }
+
+        public void ToBe(
+            string marbles,
+            Exception error = null)
+        {
+            _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, error));
+            _expectation.Ready = true;
+        }
+    }
+
     public class ObservableToBe<T>
     {
         private readonly ObservableExpectation<T> _expectation;
@@ -15,7 +33,7 @@ namespace TestMarbles
 
         public void ToBe(
             string marbles,
-            IReadOnlyDictionary<char, T> values = null,
+            IReadOnlyDictionary<char, T> values,
             Exception error = null)
         {
             _expectation.Expected.AddRange(Marbles.ToNotifications(marbles, values, error));

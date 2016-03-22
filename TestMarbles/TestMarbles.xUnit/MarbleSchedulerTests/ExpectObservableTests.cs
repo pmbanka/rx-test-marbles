@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reactive.Linq;
 using Xunit;
 
@@ -10,7 +11,7 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
         public void ExpectObservable_should_work_for_observable_never()
         {
             var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Never<int>()).ToBe("-");
+            s.ExpectObservable(Observable.Never<int>()).ToBe("-", new Dictionary<char, int>());
             s.Start();
         }
 
@@ -18,7 +19,7 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
         public void ExpectObservable_should_work_for_observable_empty()
         {
             var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Empty<int>(s)).ToBe("|");
+            s.ExpectObservable(Observable.Empty<int>(s)).ToBe("|", new Dictionary<char, int>());
             s.Start();
         }
 
@@ -34,8 +35,7 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
         public void ExpectObservable_should_work_for_observable_throw()
         {
             var s = new MarbleScheduler();
-            var ex = new Exception();
-            s.ExpectObservable(Observable.Throw<char>(ex, s)).ToBe("#", error: ex);
+            s.ExpectObservable(Observable.Throw<char>(new Exception(), s)).ToBe("#");
             s.Start();
         }
     }
