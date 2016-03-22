@@ -23,12 +23,9 @@ namespace TestMarbles
             Subscriptions = new List<Subscription>();
         }
 
-        public virtual IDisposable Subscribe(IObserver<T> observer)
+        public IDisposable Subscribe(IObserver<T> observer)
         {
-            if (observer == null)
-            {
-                throw new ArgumentNullException(nameof(observer));
-            }
+            Ensure.NotNull(observer, nameof(observer));
             Subscriptions.Add(new Subscription(_scheduler.Clock));
             var index = Subscriptions.Count - 1;
 

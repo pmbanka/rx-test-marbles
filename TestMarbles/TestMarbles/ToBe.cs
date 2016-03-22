@@ -55,10 +55,11 @@ namespace TestMarbles
             _expectation = expectation;
         }
 
-        public void ToBe(string marbles)
+        public void ToBe(params string[] marbles)
         {
-            Ensure.NotNull(marbles, nameof(marbles));
-            _expectation.Expected = Marbles.ToSubscription(marbles);
+            _expectation.Expected = marbles
+                .Select(Marbles.ToSubscription)
+                .ToList();
             _expectation.Ready = true;
         }
     }

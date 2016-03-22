@@ -100,26 +100,40 @@ namespace TestMarbles
 
     internal class SubscriptionExpectation : TestExpectation
     {
-        public Subscription Actual { get; set; }
+        public SubscriptionExpectation()
+        {
+            Actual = new List<Subscription>();
+            Expected = new List<Subscription>();
+        }
 
-        public Subscription Expected { get; set; }
+        public IList<Subscription> Actual { get; set; }
+
+        public IList<Subscription> Expected { get; set; }
 
         public override void Assert()
         {
-            Assert(Expected, Actual);
+            if (Expected.Count != Actual.Count)
+            {
+                throw new ExpectSubscriptionToBeFailedException(
+                    $"Different number of subscriptions were provided. Expected {Expected.Count} but was {Actual.Count}");
+            }
+            for (int i = 0; i < Actual.Count; i++)
+            {
+                Assert(Expected[i], Actual[i], i);
+            }
         }
 
-        private static void Assert(Subscription expected, Subscription actual)
+        private void Assert(Subscription expected, Subscription actual, int index)
         {
             if (expected.Subscribe != actual.Subscribe)
             {
-                throw new ExpectSubscriptionToBeFailedException(
-                    $"Subscription time do not match. Expected {expected.Subscribe} but was {actual.Subscribe}");
+                //throw new ExpectSubscriptionToBeFailedException(
+                //    $"Subscription time at index {index} do not match. Expected {expected.Subscribe} but was {actual.Subscribe}");
             }
             if (expected.Unsubscribe != actual.Unsubscribe)
             {
-                throw new ExpectSubscriptionToBeFailedException(
-                    $"Unsubscription time do not match. Expected {expected.Unsubscribe} but was {actual.Unsubscribe}");
+                //throw new ExpectSubscriptionToBeFailedException(
+                //    $"Unsubscription time at index {index} do not match. Expected {expected.Unsubscribe} but was {actual.Unsubscribe}");
             }
         }
     }

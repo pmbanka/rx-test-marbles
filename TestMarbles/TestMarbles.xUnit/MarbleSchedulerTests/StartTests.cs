@@ -32,7 +32,7 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
         {
             using (var s = new MarbleScheduler())
             {
-                s.ExpectSubscription(new Subscription()).ToBe("(^!)");
+                s.ExpectSubscriptions(new Subscription()).ToBe("(^!)");
             }
         }
     }

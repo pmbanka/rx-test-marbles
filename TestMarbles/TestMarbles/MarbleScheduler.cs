@@ -130,12 +130,24 @@ namespace TestMarbles
             return expectation;
         }
 
-        public SubscriptionToBe ExpectSubscription(Subscription subscription)
+        public SubscriptionToBe ExpectSubscriptions(params Subscription[] subscriptions)
         {
-            Ensure.NotNull(subscription, nameof(subscription));
+            Ensure.NotNull(subscriptions, nameof(subscriptions));
             var test = new SubscriptionExpectation
             {
-                Actual = subscription
+                Actual = subscriptions.ToList()
+            };
+            _expectations.Add(test);
+            return new SubscriptionToBe(test);
+        }
+
+        public SubscriptionToBe ExpectSubscriptions(IEnumerable<Subscription> subscriptions)
+        {
+            Ensure.NotNull(subscriptions, nameof(subscriptions));
+            var subs = subscriptions as IList<Subscription> ?? subscriptions.ToList();
+            var test = new SubscriptionExpectation
+            {
+                Actual = subs
             };
             _expectations.Add(test);
             return new SubscriptionToBe(test);
