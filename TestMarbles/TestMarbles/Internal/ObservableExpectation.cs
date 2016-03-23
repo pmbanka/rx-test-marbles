@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
 using Microsoft.Reactive.Testing;
@@ -8,6 +9,10 @@ namespace TestMarbles.Internal
 {
     internal class ObservableExpectation<T> : TestExpectation
     {
+        private IEqualityComparer<T> _comparer;
+
+        private string _expectedMarbles;
+
         private readonly List<Recorded<Notification<T>>> _actual;
 
         private readonly List<Recorded<Notification<T>>> _expected;
@@ -31,11 +36,12 @@ namespace TestMarbles.Internal
 
         public override void Assert()
         {
+            Debug.Assert(Ready);
             if (Expected.Count != Actual.Count)
             {
                 throw new ExpectObservableToBeFailedException(
                     $"Recorded unexpected number of notifications. Expected {Expected.Count} but was {Actual.Count}",
-                    ExpectedMarbles,
+                    _expectedMarbles,
                     ActualMarbles);
             }
             for (int i = 0; i < Expected.Count; i++)
@@ -51,7 +57,7 @@ namespace TestMarbles.Internal
             {
                 throw new ExpectObservableToBeFailedException(
                     $"Times for elements at index {index} do not match. Expected {expected.Time} but was {actual.Time}",
-                    ExpectedMarbles,
+                    _expectedMarbles,
                     ActualMarbles,
                     markerPosition);
             }
@@ -62,7 +68,7 @@ namespace TestMarbles.Internal
             {
                 throw new ExpectObservableToBeFailedException(
                     $"Types of elements at time {time} (index {index}) do not match. Expected {exVal.Kind} but was {acVal.Kind}",
-                    ExpectedMarbles,
+                    _expectedMarbles,
                     ActualMarbles,
                     markerPosition);
             }
@@ -70,15 +76,15 @@ namespace TestMarbles.Internal
             {               
                 throw new ExpectObservableToBeFailedException(
                     $"Errors at time {time} (index {index}) do not match. Expected {exVal.Exception.GetType()} but was {acVal.Exception.GetType()}",
-                    ExpectedMarbles,
+                    _expectedMarbles,
                     ActualMarbles,
                     markerPosition);
             }
-            if (exVal.Kind == NotificationKind.OnNext && !exVal.Value.Equals(acVal.Value))
+            if (exVal.Kind == NotificationKind.OnNext && !_comparer.Equals(exVal.Value, acVal.Value))
             {
                 throw new ExpectObservableToBeFailedException(
                     $"Elements at time {time} (index {index}) do not match. Expected {exVal.Value} but was {acVal.Value}",
-                    ExpectedMarbles,
+                    _expectedMarbles,
                     ActualMarbles,
                     markerPosition);
             }
@@ -92,19 +98,19 @@ namespace TestMarbles.Internal
                 .Count(g => g.Count() > 1);
         }
 
-        public string ActualMarbles => 
+        private string ActualMarbles => 
             Marbles.GetMarblesOrErrorMessage(Actual, Values?.ReverseKeyValue());
-
-        public string ExpectedMarbles { get; private set; }
 
         public void HandleToBe(
             string expectedMarbles, 
             IEnumerable<Recorded<Notification<T>>> expectedNotifications,
-            IReadOnlyDictionary<char, T> values = null)
+            IReadOnlyDictionary<char, T> values = null,
+            IEqualityComparer<T> comparer = null)
         {
-            ExpectedMarbles = expectedMarbles;
+            _expectedMarbles = expectedMarbles;
             _expected.AddRange(expectedNotifications);
             Values = values;
+            _comparer = comparer ?? EqualityComparer<T>.Default;
             Ready = true;
         }
     }

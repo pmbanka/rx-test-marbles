@@ -27,8 +27,22 @@ namespace TestMarbles.xUnit
         {
             var s = new TestScheduler();
             var obs = Observable.Return('a');
-            s.ScheduleAbsolute(0, () => obs.Subscribe(_ => _output.WriteLine(s.Clock.ToString())));
+            long actualClock = -1;
+            s.ScheduleAbsolute(0, () => obs.Subscribe(_ => actualClock = s.Clock));
             s.Start();
+            actualClock.Should().Be(1);
+        }
+
+        [Fact]
+        public void TestScheduler2()
+        {
+            var s = new TestScheduler();
+            var obs = s.CreateHotObservable(OnNext(0, 'a'), OnCompleted<char>(90));
+            obs.Subscribe();
+            s.Start();
+            obs.Subscriptions.Should().HaveCount(1);
+            obs.Subscriptions[0].Subscribe.Should().Be(0);
+            obs.Subscriptions[0].Unsubscribe.Should().Be(Subscription.Infinite);
         }
 
         [Fact]
@@ -56,7 +70,6 @@ namespace TestMarbles.xUnit
             scheduler.Start();
             _output.WriteLine("Time " + scheduler.Now.Ticks);
             _output.WriteLine("Cnt " + hot.Messages.Count);
-            // scheduler.Start()
         }
 
         [Fact]

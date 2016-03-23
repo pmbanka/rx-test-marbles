@@ -11,33 +11,37 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
         [Fact]
         public void ExpectObservable_should_work_for_observable_never()
         {
-            var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Never<int>()).ToBe("-", new Dictionary<char, int>());
-            s.Start();
+            using (var s = new MarbleScheduler())
+            {
+                s.ExpectObservable(Observable.Never<int>()).ToBe("-", new Dictionary<char, int>());
+            }
         }
 
         [Fact]
         public void ExpectObservable_should_work_for_observable_empty()
         {
-            var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Empty<int>(s)).ToBe("|", new Dictionary<char, int>());
-            s.Start();
+            using (var s = new MarbleScheduler())
+            {
+                s.ExpectObservable(Observable.Empty<int>(s)).ToBe("|", new Dictionary<char, int>());
+            }
         }
 
         [Fact]
         public void ExpectObservable_should_work_for_observable_return()
         {
-            var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Return('a', s)).ToBe("(a|)");
-            s.Start();
+            using (var s = new MarbleScheduler())
+            {
+                s.ExpectObservable(Observable.Return('a', s)).ToBe("(a|)");
+            }
         }
 
         [Fact]
         public void ExpectObservable_should_work_for_observable_throw()
         {
-            var s = new MarbleScheduler();
-            s.ExpectObservable(Observable.Throw<char>(new Exception(), s)).ToBe("#");
-            s.Start();
+            using (var s = new MarbleScheduler())
+            {
+                s.ExpectObservable(Observable.Throw<char>(new Exception(), s)).ToBe("#");
+            }
         }
 
         [Fact]
@@ -89,11 +93,96 @@ namespace TestMarbles.xUnit.MarbleSchedulerTests
         [Fact]
         public void ExpectObservable_should_accept_unsubscription_marble_diagram()
         {
-            var s = new MarbleScheduler();
-            var source = s.Hot("---^-a-b-|");
-            var unsubscribe =     "---!";
-            var expected =        "--a";
-            s.ExpectObservable(source, unsubscribe).ToBe(expected);
+            using (var s = new MarbleScheduler())
+            {
+                var source = s.Hot("---^-a-b-|");
+                var unsubscribe =     "---!";
+                var expected =        "--a";
+                s.ExpectObservable(source, unsubscribe).ToBe(expected);
+            }
+        }
+
+        [Fact]
+        public void ExpectObservable_should_support_testing_metastreams()
+        {
+            using (var s = new MarbleScheduler())
+            {
+                var x = s.Cold("-a-b|");
+                var y = s.Cold("-c-d|");
+                var myObservable = s.Hot("---x---y----|", 
+                    new Dictionary<char, IObservable<char>>
+                    {
+                        {'x', x },
+                        {'y', y }
+                    });
+                var expected = "---x---y----|";
+                s.ExpectObservable(myObservable).ToBe(expected, new Dictionary<char, IObservable<char>>
+                {
+                    { 'x', x},
+                    { 'y', y }
+                });
+            }
+        }
+
+        [Fact]
+        public void EqualityComparer_can_be_provided_in_ToBe()
+        {
+            using (var s = new MarbleScheduler())
+            {
+                var veryCuriousEqualityComparer = 
+                    new LambdaEqualityComparer<int>((a, b) => Math.Abs(a - b) == 1, x => 0);
+                s.ExpectObservable(Observable.Return(1)).ToBe(
+                    "(x|)",
+                    new Dictionary<char, int> {{'x', 2}},
+                    comparer: veryCuriousEqualityComparer);
+            }
+        }
+
+        [Fact]
+        public void ExpectObservable_should_materialize_inner_observables()
+        {
+            using (var s = new MarbleScheduler())
+            {
+                var x = s.Cold(         "--a--b--c--d--e--|           ");
+                var xsubs =    "         ^         !                  ";
+                var y = s.Cold(                   "---f---g---h---i--|");
+                var ysubs =    "                   ^                 !";
+                var e1 = s.Hot("---------x---------y---------|        ");
+                var e1subs =   "^                            !        ";
+                var expected = "-----------a--b--c----f---g---h---i--|";
+                var observableLookup = new Dictionary<char, IObservable<char>>
+                {
+                    {'x', x },
+                    {'y', y }
+                };
+                var result = e1.Select(p => observableLookup[p]).Switch();
+                s.ExpectObservable(result).ToBe(expected);
+                s.ExpectSubscriptions(x.Subscriptions).ToBe(xsubs);
+                s.ExpectSubscriptions(y.Subscriptions).ToBe(ysubs);
+                s.ExpectSubscriptions(e1.Subscriptions).ToBe(e1subs);
+            }
+        }
+
+        private class LambdaEqualityComparer<T> : IEqualityComparer<T>
+        {
+            private readonly Func<T, T, bool> _comparer;
+            private readonly Func<T, int> _hash;
+
+            public LambdaEqualityComparer(Func<T, T, bool> comparer, Func<T, int> hash)
+            {
+                _comparer = comparer;
+                _hash = hash;
+            }
+
+            public bool Equals(T x, T y)
+            {
+                return _comparer(x, y);
+            }
+
+            public int GetHashCode(T obj)
+            {
+                return _hash(obj);
+            }
         }
     }
     

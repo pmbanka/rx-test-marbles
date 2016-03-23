@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;
@@ -26,6 +27,7 @@ namespace TestMarbles.Internal
 
         public override void Assert()
         {
+            Debug.Assert(Ready);
             if (Expected.Count != Actual.Count)
             {
                 throw new ExpectSubscriptionToBeFailedException(

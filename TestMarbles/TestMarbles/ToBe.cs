@@ -36,11 +36,16 @@ namespace TestMarbles
         public void ToBe(
             string marbles,
             IReadOnlyDictionary<char, T> values,
-            Exception error = null)
+            Exception error = null,
+            IEqualityComparer<T> comparer = null)
         {
             Ensure.NotNull(marbles, nameof(marbles));
             Ensure.NotNull(values, nameof(values));
-            _expectation.HandleToBe(marbles, Marbles.ToNotifications(marbles, values, error), values);
+            _expectation.HandleToBe(
+                marbles, 
+                Marbles.ToNotifications(marbles, values, error), 
+                values,
+                comparer);
         }
     }
 
