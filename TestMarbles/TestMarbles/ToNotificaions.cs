@@ -30,7 +30,6 @@ namespace TestMarbles
                     nameof(marbles));
             }
             
-            // TODO handle cold observables in T
             long subscribeIndex = marbles.IndexOf(Marker.Subscription);
             long frameOffset = subscribeIndex == -1 ? 0 : subscribeIndex * -MarbleScheduler.FrameTimeFactor;
             long groupStart = -1;
