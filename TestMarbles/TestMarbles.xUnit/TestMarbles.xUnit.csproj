@@ -103,7 +103,7 @@
     <Compile Include="MarbleSchedulerTests\ExpectObservableTests.cs" />
     <Compile Include="MarblesTests\ToSubscriptionTests.cs" />
     <Compile Include="MarblesTests\ToNotificationsTests.cs" />
-    <Compile Include="DebugUnitTests.cs" />
+    <Compile Include="Scratchpad.cs" />
     <Compile Include="MarblesTests\FromNotificationsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

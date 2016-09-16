@@ -10,11 +10,11 @@ using TestMarbles.Extensions;
 
 namespace TestMarbles.xUnit
 {
-    public class DebugUnitTests : ReactiveTest
+    public class Scratchpad : ReactiveTest
     {
         private readonly ITestOutputHelper _output;
 
-        public DebugUnitTests(ITestOutputHelper output)
+        public Scratchpad(ITestOutputHelper output)
         {
             _output = output;
         }
