@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reactive;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
-using TestMarbles.Helpers;
 using TestMarbles.Internal;
 using TestMarbles.Utils;
 

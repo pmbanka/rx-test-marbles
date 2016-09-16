@@ -49,7 +49,7 @@ namespace TestMarbles.xUnit
             {
                 var e1 = s.Hot("-a");
                 var e2 = s.Hot("--b");
-                var expected = "-cb";
+                var expected = "-ab";
                 s.ExpectObservable(e1.Merge(e2)).ToBe(expected);
             }
         }
@@ -61,7 +61,7 @@ namespace TestMarbles.xUnit
             {
                 var e1 = s.Hot("----a--^--b-------c--|");
                 var e2 = s.Hot(  "---d-^--e---------f-----|");
-                var expected =        "---(be)------c-f-----|";
+                var expected =        "---(be)----c-f-----|";
                 s.ExpectObservable(e1.Merge(e2)).ToBe(expected);
             }
         }

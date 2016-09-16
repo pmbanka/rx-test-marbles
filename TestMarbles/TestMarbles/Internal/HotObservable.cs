@@ -5,7 +5,6 @@ using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Disposables;
 using Microsoft.Reactive.Testing;
-using TestMarbles.Helpers;
 using TestMarbles.Utils;
 
 namespace TestMarbles.Internal

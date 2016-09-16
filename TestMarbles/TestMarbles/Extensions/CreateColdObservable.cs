@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Reactive.Testing;
-using TestMarbles.Helpers;
 using TestMarbles.Utils;
 
 namespace TestMarbles.Extensions
