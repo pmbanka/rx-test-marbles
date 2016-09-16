@@ -63,7 +63,7 @@ namespace TestMarbles.xUnit.MarblesTests
         }
 
         [Fact]
-        public void groups_are_parsed_correctly()
+        public void groups_are_parsed_correctly_when_groups_contains_end()
         {
             var n = new List<Recorded<Notification<char>>>
             {
@@ -76,7 +76,37 @@ namespace TestMarbles.xUnit.MarblesTests
         }
 
         [Fact]
-        public void parsing_notifications_with_enexpected_timestamps_throws()
+        public void undisplayable_overlapping_groups_throw()
+        {
+            var n = new List<Recorded<Notification<char>>>
+            {
+                OnNext(10, 'X'),
+                OnNext(10, 'Y'),
+                OnNext(20, 'K'),
+                OnNext(50, 'Z'),
+                OnCompleted<char>(50)
+            };
+            Action action = () => Marbles.FromNotifications(n);
+            Assert.Throws<ArgumentException>(action);
+        }
+
+        [Fact]
+        public void groups_are_parsed_correctly()
+        {
+            var n = new List<Recorded<Notification<char>>>
+            {
+                OnNext(30, 'b'),
+                OnNext(30, 'e'),
+                OnNext(110, 'c'),
+                OnNext(130, 'f'),
+                OnCompleted<char>(190)
+            };
+            var actual = Marbles.FromNotifications(n);
+            Assert.Equal("---(be)----c-f-----|", actual);
+        }
+
+        [Fact]
+        public void parsing_notifications_with_unexpected_timestamps_throws()
         {
             var n = new List<Recorded<Notification<char>>>
             {

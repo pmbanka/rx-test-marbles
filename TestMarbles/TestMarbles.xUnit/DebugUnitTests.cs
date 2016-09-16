@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Reactive.Testing;
 using Xunit;
@@ -46,13 +43,25 @@ namespace TestMarbles.xUnit
         }
 
         [Fact]
+        public void Markers()
+        {
+            using (var s = new MarbleScheduler())
+            {
+                var e1 = s.Hot("-a");
+                var e2 = s.Hot("--b");
+                var expected = "-cb";
+                s.ExpectObservable(e1.Merge(e2)).ToBe(expected);
+            }
+        }
+
+        [Fact]
         public void Ensure()
         {
             using (var s = new MarbleScheduler())
             {
                 var e1 = s.Hot("----a--^--b-------c--|");
                 var e2 = s.Hot(  "---d-^--e---------f-----|");
-                var expected =        "---(be)----c-f-----|";
+                var expected =        "---(be)------c-f-----|";
                 s.ExpectObservable(e1.Merge(e2)).ToBe(expected);
             }
         }

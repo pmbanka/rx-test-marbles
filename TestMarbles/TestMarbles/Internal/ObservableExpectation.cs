@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
@@ -11,11 +11,10 @@ namespace TestMarbles.Internal
     {
         private IEqualityComparer<T> _comparer;
 
-        private string _expectedMarbles;
-
         private readonly List<Recorded<Notification<T>>> _actual;
 
         private readonly List<Recorded<Notification<T>>> _expected;
+        private string _expectedMarbles;
 
         public ObservableExpectation()
         {
@@ -39,10 +38,9 @@ namespace TestMarbles.Internal
             Debug.Assert(Ready);
             if (Expected.Count != Actual.Count)
             {
-                throw new ExpectObservableToBeFailedException(
-                    $"Recorded unexpected number of notifications. Expected {Expected.Count} but was {Actual.Count}",
-                    _expectedMarbles,
-                    ActualMarbles);
+                throw CreateError(
+$@"Recorded unexpected number of notifications. 
+Expected {Expected.Count} but was {Actual.Count}");
             }
             for (int i = 0; i < Expected.Count; i++)
             {
@@ -52,54 +50,77 @@ namespace TestMarbles.Internal
 
         private void Assert(Recorded<Notification<T>> expected, Recorded<Notification<T>> actual, int index)
         {
-            var markerPosition = (int)(actual.Time/MarbleScheduler.FrameTimeFactor) + GetNumberOfGroupsBefore(actual) * 2 + 1;
             if (expected.Time != actual.Time)
             {
-                throw new ExpectObservableToBeFailedException(
-                    $"Times for elements at index {index} do not match. Expected {expected.Time} but was {actual.Time}",
-                    _expectedMarbles,
-                    ActualMarbles,
-                    markerPosition);
+                throw CreateError(
+$@"Times for elements at index {index} do not match.
+Expected event at {expected.Time} but something happened at {actual.Time}",
+                        expected.Time, actual.Time);
             }
             var exVal = expected.Value;
             var acVal = actual.Value;
             var time = actual.Time;
             if (exVal.Kind != acVal.Kind)
             {
-                throw new ExpectObservableToBeFailedException(
-                    $"Types of elements at time {time} (index {index}) do not match. Expected {exVal.Kind} but was {acVal.Kind}",
-                    _expectedMarbles,
-                    ActualMarbles,
-                    markerPosition);
+                throw CreateError(
+$@"Types of elements at time {time} (index {index}) do not match.
+Expected {exVal.Kind} but was {acVal.Kind}",
+                        time);
             }
             if (exVal.Kind == NotificationKind.OnError && exVal.Exception.GetType() != acVal.Exception.GetType())
-            {               
-                throw new ExpectObservableToBeFailedException(
-                    $"Errors at time {time} (index {index}) do not match. Expected {exVal.Exception.GetType()} but was {acVal.Exception.GetType()}",
-                    _expectedMarbles,
-                    ActualMarbles,
-                    markerPosition);
+            {
+                throw CreateError(
+$@"Errors at time {time} (index {index}) do not match. 
+Expected {exVal.Exception.GetType()} but was {acVal.Exception.GetType()}",
+                        time);
             }
             if (exVal.Kind == NotificationKind.OnNext && !_comparer.Equals(exVal.Value, acVal.Value))
             {
-                throw new ExpectObservableToBeFailedException(
-                    $"Elements at time {time} (index {index}) do not match. Expected {exVal.Value} but was {acVal.Value}",
-                    _expectedMarbles,
-                    ActualMarbles,
-                    markerPosition);
+                throw CreateError(
+$@"Elements at time {time} (index {index}) do not match. 
+Expected {exVal.Value} but was {acVal.Value}",
+                        time);
             }
         }
 
-        private int GetNumberOfGroupsBefore(Recorded<Notification<T>> actual)
+        private ExpectObservableToBeFailedException CreateError(string message, long? expectedTime = null, long? actualTime = null)
         {
-            return Actual
-                .TakeWhile(p => p != actual)
-                .GroupBy(p => p.Time)
-                .Count(g => g.Count() > 1);
+            var msg = $"ExpectObservable.ToBe failed.\n{message}.\n{GetDrawingMessage(expectedTime, actualTime)}";
+            return new ExpectObservableToBeFailedException(msg);
         }
 
-        private string ActualMarbles => 
-            Marbles.GetMarblesOrErrorMessage(Actual, Values?.ReverseKeyValue());
+        private string GetDrawingMessage(long? expectedTime, long? actualTime)
+        {
+            var actualMarbles = TryGetActualMarbles();
+            if (actualMarbles == null)
+            {
+                return "";
+            }
+            var drawing = $"Expected: \"{_expectedMarbles}\"\nActual:   \"{actualMarbles}\"";
+            if (!expectedTime.HasValue)
+            {
+                return drawing;
+            }
+            if (!actualTime.HasValue)
+            {
+                actualTime = expectedTime;
+            }
+            var above = GetTimeMarker(expectedTime.Value, "↓");
+            var below = GetTimeMarker(actualTime.Value, "↑");
+            return string.Join("\n", above, drawing, below);
+        }
+
+        private string GetTimeMarker(long time, string arrow)
+        {
+            var position = (int)(time / MarbleScheduler.FrameTimeFactor);
+            var spaces = new string(' ', 11 + position);
+            return $"{spaces}{arrow} (time {time})";
+        }
+
+        private string TryGetActualMarbles()
+        {
+            return Marbles.TryGetMarblesAcceptingNullDict(Actual, Values?.ReverseKeyValue());
+        }
 
         public void HandleToBe(
             string expectedMarbles, 

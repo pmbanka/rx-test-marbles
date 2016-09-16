@@ -19,29 +19,10 @@ namespace TestMarbles
         {
         }
 
-        public ExpectObservableToBeFailedException(
-            string message, 
-            string expectedMarbles, 
-            string actualMarbles,
-            int? markerPosition = null) : this(CreateMessage(message, expectedMarbles, actualMarbles, markerPosition))
-        {
-        }
-
         protected ExpectObservableToBeFailedException(
             SerializationInfo info,
             StreamingContext context) : base(info, context)
         {
-        }
-
-        private static string CreateMessage(string message, string expectedMarbles, string actualMarbles, int? markerPosition)
-        {
-            var msg = $"ExpectObservable.ToBe failed. {message}.\nExpected: \"{expectedMarbles}\"\nActual:   \"{actualMarbles}\"";
-            if (markerPosition.HasValue)
-            {
-                var spaces = new string(Enumerable.Repeat(' ', 11 + markerPosition.Value).ToArray());
-                msg = $"{msg}\n{spaces}^";
-            }
-            return msg;
         }
     }
 
