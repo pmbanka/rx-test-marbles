@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Reactive.Testing;
 
-namespace TestMarbles.Helpers
+namespace TestMarbles.Utils
 {
     internal static class Ensure
     {

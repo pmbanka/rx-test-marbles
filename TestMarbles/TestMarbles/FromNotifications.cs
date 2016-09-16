@@ -5,6 +5,7 @@ using System.Reactive;
 using System.Text;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;
+using TestMarbles.Utils;
 
 namespace TestMarbles
 {

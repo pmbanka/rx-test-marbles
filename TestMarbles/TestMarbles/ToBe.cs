@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TestMarbles.Helpers;
 using TestMarbles.Internal;
+using TestMarbles.Utils;
 
 namespace TestMarbles
 {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
+using TestMarbles.Utils;
 using Xunit;
 
 namespace TestMarbles.xUnit.MarbleSchedulerTests

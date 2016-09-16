@@ -6,6 +6,7 @@ using System.Reactive.Concurrency;
 using Microsoft.Reactive.Testing;
 using TestMarbles.Helpers;
 using TestMarbles.Internal;
+using TestMarbles.Utils;
 
 namespace TestMarbles
 {
@@ -118,7 +119,6 @@ namespace TestMarbles
                 disposable = observable.Subscribe(
                     x =>
                     {
-                        // TODO handle observable-of-observable
                         expectation.AddNotification(Clock, Notification.CreateOnNext(x));
                     },
                     err => expectation.AddNotification(Clock, Notification.CreateOnError<T>(err)),
