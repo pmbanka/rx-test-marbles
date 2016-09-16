@@ -3,6 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{C4A3C95C-D332-43B4-913A-40DEB670D820}"
+	ProjectSection(SolutionItems) = preProject
+		paket.dependencies = paket.dependencies
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMarbles", "TestMarbles\TestMarbles.csproj", "{71F7E332-FF10-44CB-93BB-D2A0640A17A3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestMarbles.xUnit", "TestMarbles.xUnit\TestMarbles.xUnit.csproj", "{E920D15E-3CCE-4813-A016-8E961DAE04EC}"
