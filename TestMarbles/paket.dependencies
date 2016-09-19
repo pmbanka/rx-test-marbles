@@ -2,5 +2,6 @@ source https://www.nuget.org/api/v2/
 framework >= net452
 
 nuget FluentAssertions 4.2.2
-nuget Rx-Testing 2.2.5
+nuget Microsoft.Reactive.Testing
+nuget System.Reactive
 nuget xunit 2.1.0
