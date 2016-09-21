@@ -1,7 +1,7 @@
 FRAMEWORK: >= NET452
 NUGET
   remote: https://www.nuget.org/api/v2
-    FluentAssertions (4.2.2)
+    FluentAssertions (4.14)
     Microsoft.Reactive.Testing (3.0)
       System.Reactive.Linq (>= 3.0)
       System.Reactive.PlatformServices (>= 3.0)
