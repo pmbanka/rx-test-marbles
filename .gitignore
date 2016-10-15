@@ -3,6 +3,8 @@
 
 # Fun stuff
 .paket/paket.exe
+output-bin
+output-test
 
 # User-specific files
 *.suo

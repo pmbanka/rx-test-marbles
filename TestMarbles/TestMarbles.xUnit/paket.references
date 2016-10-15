@@ -1,3 +1,4 @@
 FluentAssertions
 xunit
 Microsoft.Reactive.Testing
+xunit.runner.console

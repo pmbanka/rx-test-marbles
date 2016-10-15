@@ -5,3 +5,5 @@ nuget FluentAssertions ~> 4.2
 nuget Microsoft.Reactive.Testing ~> 3
 nuget System.Reactive ~> 3
 nuget xunit ~> 2.1
+nuget FAKE
+nuget xunit.runner.console ~> 2.1
