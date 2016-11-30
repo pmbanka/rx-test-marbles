@@ -2,7 +2,7 @@
 
 This is an experimental C# DSL for testing Rx streams. 
 
-The syntax is inspired by [RxJS Marble Tests](https://github.com/ReactiveX/rxjs/blob/master/doc/writing-marble-tests.md), so all credits goes to them. Syntax for defining observables is identical.
+This library is a port of [RxJS Marble Tests](https://github.com/ReactiveX/rxjs/blob/master/doc/writing-marble-tests.md) so all credits goes to them. Syntax for defining observables is identical.
 
 Example usage (see more in the tests project):
 
